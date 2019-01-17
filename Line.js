@@ -93,7 +93,8 @@ export default class Line extends React.Component {
                 expectedTime: '',
                 activeWeek: false,
                 activeWeekend: false,
-                selectedTime: ''
+                selectedTime: '',
+                selectedTwo: false
             });
             this.route = this.navigate.getParam('route');
         } else if (departure === 'returned') {
@@ -106,8 +107,8 @@ export default class Line extends React.Component {
                 expectedTime: '',
                 activeWeek: false,
                 activeWeekend: false,
-                selectedTime: ''
-
+                selectedTime: '',
+                selectedTwo: false
             });
             this.route = this.reverseRoute();
         }
@@ -344,29 +345,31 @@ export default class Line extends React.Component {
             diffHour: ''
         });
         for (let i = 0; i < allHours.length; i++) {
+            console.log(allHours[i])
             if (myDate < allHours[i]) {
 
                 var date1 = new Date();
                 var date2 = new Date();
                 let expectedTime = allHours[i].split(":");
                 if (expectedTime[1] != "[]") {
-                    this.setState({ expectedTime: allHours[i] });
-                    let myTime = myDate.split(":");
-                    date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
-                    date2.setHours(expectedTime[0]); date2.setMinutes(expectedTime[1]);
-                    var msec = date2 - date1;
-                    var mins = Math.floor(msec / 60000);
-                    var hrs = Math.floor(mins / 60);
-                    if (hrs != 0) {
-                        this.setState({ exactTime: hrs + " ore " + mins + " minute" })
-                    } else {
-                        this.setState({ exactTime: mins + " minute" })
-                    }
-                }
-                else if (expectedTime[1] === "[]") {
-                    i++;
-                    let expectedTime = allHours[i].split(":");
-                    if (expectedTime[1] != "[]") {
+                    console.log(expectedTime[1])
+                    let TimeStar = expectedTime[1].split("*");
+                    console.log(TimeStar)
+                    if (TimeStar[1] === "") {
+                        console.log(TimeStar[1])
+                        this.setState({ expectedTime: allHours[i] });
+                        let myTime = myDate.split(":");
+                        date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
+                        date2.setHours(expectedTime[0]); date2.setMinutes(TimeStar[0]);
+                        var msec = date2 - date1;
+                        var mins = Math.floor(msec / 60000);
+                        var hrs = Math.floor(mins / 60);
+                        if (hrs != 0) {
+                            this.setState({ exactTime: hrs + " ore " + mins + " minute" })
+                        } else {
+                            this.setState({ exactTime: mins + " minute" })
+                        }
+                    }else{
                         this.setState({ expectedTime: allHours[i] });
                         let myTime = myDate.split(":");
                         date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
@@ -378,6 +381,42 @@ export default class Line extends React.Component {
                             this.setState({ exactTime: hrs + " ore " + mins + " minute" })
                         } else {
                             this.setState({ exactTime: mins + " minute" })
+                        }
+                    }
+                   
+                }
+                else if (expectedTime[1] === "[]") {
+                    i++;
+                    let expectedTime = allHours[i].split(":");
+                    if (expectedTime[1] != "[]") {
+                        console.log(expectedTime[1])
+                        var TimeStar = expectedTime[1].split("*");
+                        if (TimeStar[1] === "") {
+                            this.setState({ expectedTime: allHours[i] });
+                            let myTime = myDate.split(":");
+                            date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
+                            date2.setHours(expectedTime[0]); date2.setMinutes(TimeStar[0]);
+                            var msec = date2 - date1;
+                            var mins = Math.floor(msec / 60000);
+                            var hrs = Math.floor(mins / 60);
+                            if (hrs != 0) {
+                                this.setState({ exactTime: hrs + " ore " + mins + " minute" })
+                            } else {
+                                this.setState({ exactTime: mins + " minute" })
+                            }
+                        } else {
+                            this.setState({ expectedTime: allHours[i] });
+                            let myTime = myDate.split(":");
+                            date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
+                            date2.setHours(expectedTime[0]); date2.setMinutes(expectedTime[1]);
+                            var msec = date2 - date1;
+                            var mins = Math.floor(msec / 60000);
+                            var hrs = Math.floor(mins / 60);
+                            if (hrs != 0) {
+                                this.setState({ exactTime: hrs + " ore " + mins + " minute" })
+                            } else {
+                                this.setState({ exactTime: mins + " minute" })
+                            }
                         }
                     }
                     else {
@@ -450,8 +489,6 @@ export default class Line extends React.Component {
                         style={styles.buttonModalRight}
                         onPress={() => {
                             this.viewTime('returned')
-                            this.pula();
-
                         }}
                         underlayColor='#fff'>
                         <Text style={styles.text}>{'Intors'.toLocaleUpperCase()}</Text>
@@ -467,8 +504,6 @@ export default class Line extends React.Component {
                         style={styles.buttonModalLeft}
                         onPress={() => {
                             this.viewTime('going')
-                            this.pula();
-
                         }}
                         underlayColor='#fff'>
                         <Icon name="chevron-circle-left" size={25} color="black" style={styles.iconLeft} />
@@ -629,7 +664,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         fontSize: 16,
         fontWeight: '900',
-        color: 'black',
+        color: '#9d73fd',
         alignSelf: 'center',
     },
     titleExpected: {

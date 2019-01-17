@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Image, Modal, Text, TouchableHighlight, View, TextInput, StyleSheet, TouchableOpacity, Dimensions, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SearchableDropdown from 'react-native-searchable-dropdown';
+import Spinner from 'react-native-spinkit';
 
 const dimensions = Dimensions.get('window');
 const imageHeight = Math.round(dimensions.width * 9 / 16);
@@ -73,6 +74,9 @@ export default class HomeScreen extends React.Component {
                 }
                 this.setState({ tableStations });
             })
+            .then(() => {
+                this.setState({ allLoaded: true })
+            })
     }
     state = {
         modalVisible: false,
@@ -91,11 +95,157 @@ export default class HomeScreen extends React.Component {
     }
     CheckView = () => {
         if(this.state.allLoaded === true){
+            const { navigate } = this.props.navigation;
             return(
-                <View>
-               
+                <View style={{ flex: 1, }}>
+                    <Image source={require('./assets/wave.png')} style={styles.bgMain} resizeMode={'cover'} />
+                    <Modal animationType={"slide"} transparent={true}
+                        visible={this.state.modalVisible}
+                        onRequestClose={() => { console.log("Modal has been closed."); this.toggleModal(!this.state.modalVisible) }}>
+                        <View style={styles.modal}>
+                            <Image source={require('./assets/wave2.png')} style={styles.bgImages} resizeMode={'cover'} />
+
+                            <Text style={styles.textModal}>Cauta statia</Text>
+                            {/* <TextInput editable={true} value={this.state.text} onChangeText={(text) => { this.setState({ text }) }} style={styles.input} /> */}
+                            <SearchableDropdown
+                                onTextChange={(text) => { this.setState({ text }); console.log(this.state.text.name) }}
+                                onItemSelect={(text) => { this.setState({ text, itemSelect: true }); console.log(this.state.text.name) }}
+                                containerStyle={{ padding: 5 }}
+                                textInputStyle={{
+                                    padding: 12,
+                                    borderWidth: 1,
+                                    borderColor: 'white',
+                                    borderRadius: 0,
+                                    color: '#fff',
+                                }}
+                                itemStyle={{
+                                    padding: 10,
+                                    marginTop: 2,
+                                    backgroundColor: 'white',
+                                    borderColor: 'white',
+                                    borderWidth: 1,
+                                    borderRadius: 5,
+                                }}
+                                itemTextStyle={{ color: 'black' }}
+                                itemsContainerStyle={{ maxHeight: 140 }}
+                                items={this.state.tableStations}
+                                placeholder="Scrie statia"
+                                resetValue={false}
+                                underlineColorAndroid="transparent"
+                                value={this.state.textLine}
+                            />
+                            <TouchableOpacity
+                                style={styles.buttonModal}
+                                onPress={() => {
+                                    if (this.state.text !== "") {
+                                        if (this.state.itemSelect === false) {
+                                            alert('Te rugam selecteaza statia')
+                                        } else {
+                                            this.toggleModal(!this.state.modalVisible);
+                                            navigate('Stations', { stationName: this.state.text.name });
+                                            this.setState({ text: "" })
+                                        }
+                                    } else {
+                                        alert('Te rugam selecteaza statia');
+
+                                    }
+                                }}
+                                underlayColor='#fff'>
+                                <Text style={styles.text}>{'Cauta'.toLocaleUpperCase()}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.buttonModal}
+                                onPress={() => this.toggleModal(!this.state.modalVisible)}
+                                underlayColor='#fff'>
+                                <Text style={styles.text}>{'Anuleaza'.toLocaleUpperCase()}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Modal>
+
+                    <Modal animationType={"slide"} transparent={true}
+                        visible={this.state.modalVisibleLine}
+                        onRequestClose={() => { console.log("Modal has been closed."); this.toggleModalLine(!this.state.modalVisibleLine) }}>
+                        <View style={styles.modal}>
+                            <Image source={require('./assets/wave2.png')} style={styles.bgImages} resizeMode={'cover'} />
+
+                            <Text style={styles.textModal}>Cauta linia</Text>
+                            {/* <TextInput editable={true} value={this.state.textLine} onChangeText={(textLine) => { this.setState({ textLine }) }} style={styles.input} /> */}
+                            <SearchableDropdown
+                                onTextChange={(textLine) => { this.setState({ textLine }); console.log(this.state.textLine.name) }}
+                                onItemSelect={(textLine) => { this.setState({ textLine, itemSelect: true }); console.log(this.state.textLine.name) }}
+                                containerStyle={{ padding: 5 }}
+                                textInputStyle={{
+                                    padding: 12,
+                                    borderWidth: 1,
+                                    borderColor: 'white',
+                                    borderRadius: 0,
+                                    color: '#fff',
+                                }}
+                                itemStyle={{
+                                    padding: 10,
+                                    marginTop: 2,
+                                    backgroundColor: 'white',
+                                    borderColor: 'white',
+                                    borderWidth: 1,
+                                    borderRadius: 5,
+                                }}
+                                itemTextStyle={{ color: 'black' }}
+                                itemsContainerStyle={{ maxHeight: 140 }}
+                                items={this.state.tableLines}
+                                placeholder="Scrie linia"
+                                resetValue={false}
+                                underlineColorAndroid="transparent"
+                                value={this.state.textLine}
+                            />
+                            <TouchableOpacity
+                                style={styles.buttonModal}
+                                onPress={() => {
+                                    if (this.state.textLine !== "") {
+                                        if (this.state.itemSelect === false) {
+                                            alert('Te rugam selecteaza statia');
+                                        } else {
+                                            this.toggleModalLine(!this.state.modalVisibleLine);
+                                            navigate('Searchline', { lineName: this.state.textLine.name });
+                                            this.setState({ textLine: "" })
+                                        }
+                                    } else {
+                                        alert('Te rugam selecteaza statia');
+                                    }
+                                }}
+                                underlayColor='#fff'>
+                                <Text style={styles.text}>{'Cauta'.toLocaleUpperCase()}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.buttonModal}
+                                onPress={() => this.toggleModalLine(!this.state.modalVisibleLine)}
+                                underlayColor='#fff'>
+                                <Text style={styles.text}>{'Anuleaza'.toLocaleUpperCase()}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Modal>
+                    <View style={styles.container}>
+                        <TouchableHighlight onPress={this.toggleModal.bind(this, true)} style={styles.buttonOpenModal} underlayColor={'transparent'}>
+                            <Text style={styles.textOpenModal}>
+                                Cauta statia {"  "}
+                                <Icon name="map-signs" size={25} color="white" style={{ paddingLeft: 20 }} />
+                            </Text>
+                        </TouchableHighlight>
+                    </View>
+                    <View style={styles.container2}>
+                        <TouchableOpacity onPress={this.toggleModalLine.bind(this, true)} style={styles.buttonOpenModalLine} underlayColor={'transparent'}>
+                            <Text style={styles.textOpenModal}>
+                                Cauta linia {"  "}
+                                <Icon name="bus" size={25} color="white" style={{ paddingLeft: 20 }} />
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                
                 </View>
+            )
+        }
+        else{
+            return(
+                <Spinner style={styles.spinner} color={'#9d73fd'} size={100} type={'Wave'} />
             )
         }
     }
@@ -103,157 +253,16 @@ export default class HomeScreen extends React.Component {
     render() {
         const { navigate } = this.props.navigation;
         return (
-            <View style={{ flex: 1,}}>
-                <Image source={require('./assets/wave.png')} style={styles.bgMain} resizeMode={'cover'} />
-                <Modal animationType={"slide"} transparent={true}
-                    visible={this.state.modalVisible}
-                    onRequestClose={() => { console.log("Modal has been closed."); this.toggleModal(!this.state.modalVisible) }}>
-                    <View style={styles.modal}>
-                        <Image source={require('./assets/wave2.png')} style={styles.bgImages} resizeMode={'cover'} />
-
-                        <Text style={styles.textModal}>Cauta statia</Text>
-                        {/* <TextInput editable={true} value={this.state.text} onChangeText={(text) => { this.setState({ text }) }} style={styles.input} /> */}
-                        <SearchableDropdown
-                            onTextChange={(text) => { this.setState({ text }); console.log(this.state.text.name) }}
-                            onItemSelect={(text) => { this.setState({ text, itemSelect: true }); console.log(this.state.text.name) }}
-                            containerStyle={{ padding: 5 }}
-                            textInputStyle={{
-                                padding: 12,
-                                borderWidth: 1,
-                                borderColor: 'white',
-                                borderRadius: 0,
-                                color: '#fff',
-                            }}
-                            itemStyle={{
-                                padding: 10,
-                                marginTop: 2,
-                                backgroundColor: 'white',
-                                borderColor: 'white',
-                                borderWidth: 1,
-                                borderRadius: 5,
-                            }}
-                            itemTextStyle={{ color: 'black' }}
-                            itemsContainerStyle={{ maxHeight: 140 }}
-                            items={this.state.tableStations}
-                            placeholder="Scrie statia"
-                            resetValue={false}
-                            underlineColorAndroid="transparent"
-                            value={this.state.textLine}
-                        />
-                        <TouchableOpacity
-                            style={styles.buttonModal}
-                            onPress={() => { 
-                                if(this.state.text!==""){
-                                    if (this.state.itemSelect === false) {
-                                        alert('Te rugam selecteaza statia')
-                                    }else{
-                                        this.toggleModal(!this.state.modalVisible);
-                                        navigate('Stations', { stationName: this.state.text.name });
-                                        this.setState({ text: "" })
-                                    }
-                                }else{
-                                    alert('Te rugam selecteaza statia');
-
-                                }
-                            }}
-                            underlayColor='#fff'>
-                            <Text style={styles.text}>{'Cauta'.toLocaleUpperCase()}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.buttonModal}
-                            onPress={() => this.toggleModal(!this.state.modalVisible)}
-                            underlayColor='#fff'>
-                            <Text style={styles.text}>{'Anuleaza'.toLocaleUpperCase()}</Text>
-                        </TouchableOpacity>
-                    </View>
-                </Modal>
-
-                <Modal animationType={"slide"} transparent={true}
-                    visible={this.state.modalVisibleLine}
-                    onRequestClose={() => { console.log("Modal has been closed."); this.toggleModalLine(!this.state.modalVisibleLine) }}>
-                    <View style={styles.modal}>
-                        <Image source={require('./assets/wave2.png')} style={styles.bgImages} resizeMode={'cover'} />
-
-                        <Text style={styles.textModal}>Cauta linia</Text>
-                        {/* <TextInput editable={true} value={this.state.textLine} onChangeText={(textLine) => { this.setState({ textLine }) }} style={styles.input} /> */}
-                        <SearchableDropdown
-                            onTextChange={(textLine) => { this.setState({ textLine }); console.log(this.state.textLine.name) }}
-                            onItemSelect={(textLine) => { this.setState({ textLine, itemSelect: true }); console.log(this.state.textLine.name) }}
-                            containerStyle={{ padding: 5 }}
-                            textInputStyle={{
-                                padding: 12,
-                                borderWidth: 1,
-                                borderColor: 'white',
-                                borderRadius: 0,
-                                color: '#fff',
-                            }}
-                            itemStyle={{
-                                padding: 10,
-                                marginTop: 2,
-                                backgroundColor: 'white',
-                                borderColor: 'white',
-                                borderWidth: 1,
-                                borderRadius: 5,
-                            }}
-                            itemTextStyle={{ color: 'black' }}
-                            itemsContainerStyle={{ maxHeight: 140 }}
-                            items={this.state.tableLines}
-                            placeholder="Scrie linia"
-                            resetValue={false}
-                            underlineColorAndroid="transparent"
-                            value={this.state.textLine}
-                        />
-                        <TouchableOpacity
-                            style={styles.buttonModal}
-                            onPress={() => { 
-                                if (this.state.textLine !== "") {
-                                    if (this.state.itemSelect === false) {
-                                        alert('Te rugam selecteaza statia');
-                                    }else{
-                                        this.toggleModalLine(!this.state.modalVisibleLine);
-                                        navigate('Searchline', { lineName: this.state.textLine.name });
-                                        this.setState({ textLine: "" }) 
-                                    }
-                                }else{
-                                    alert('Te rugam selecteaza statia');
-                                }
-                            }}
-                            underlayColor='#fff'>
-                            <Text style={styles.text}>{'Cauta'.toLocaleUpperCase()}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.buttonModal}
-                            onPress={() => this.toggleModalLine(!this.state.modalVisibleLine)}
-                            underlayColor='#fff'>
-                            <Text style={styles.text}>{'Anuleaza'.toLocaleUpperCase()}</Text>
-                        </TouchableOpacity>
-                    </View>
-                </Modal>
-                <View style={styles.container}>
-                    <TouchableHighlight onPress={this.toggleModal.bind(this, true)} style={styles.buttonOpenModal} underlayColor={'transparent'}>
-                        <Text style={styles.textOpenModal}>
-                            Cauta statia {"  "}
-                            <Icon name="map-signs" size={25} color="white" style={{ paddingLeft: 20 }} />
-                        </Text>
-                    </TouchableHighlight>
-                </View>
-                <View style={styles.container2}>
-                    <TouchableOpacity onPress={this.toggleModalLine.bind(this, true)} style={styles.buttonOpenModalLine} underlayColor={'transparent'}>
-                        <Text style={styles.textOpenModal}>
-                            Cauta linia {"  "}
-                            <Icon name="bus" size={25} color="white" style={{ paddingLeft: 20 }} />
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                {this.CheckView()}
-
-            </View>
-          
+                this.CheckView()
         );
     }
 }
 
 const styles = StyleSheet.create({
+    spinner: {
+        alignSelf: 'center',
+        marginTop: 150,
+    },
     container: {
         alignItems: 'center',
         padding: 10,
