@@ -4,8 +4,6 @@ import { Image, Modal, Text, TouchableHighlight, View, TextInput, StyleSheet, To
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import Spinner from 'react-native-spinkit';
-import SplashScreen from 'react-native-splash-screen';
-
 const dimensions = Dimensions.get('window');
 const imageHeight = Math.round(dimensions.width * 9 / 16);
 const imageWidth = dimensions.width;
@@ -34,7 +32,7 @@ export default class HomeScreen extends React.Component {
 
     }
     componentDidMount(){
-        SplashScreen.hide();
+        
         fetch('https://ratbv-scraper.herokuapp.com/allroutes')
             .then((response) => {
                 return response.json();
