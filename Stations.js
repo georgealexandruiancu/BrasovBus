@@ -39,24 +39,15 @@ export default class Stations extends React.Component {
                 }
             })
             .then(() => {
-                if (this.state.stationName !== this.state.stationName.toUpperCase()) {
-                    var splitStr = this.state.stationName.toLowerCase().split(' ');
-                    for (var i = 0; i < splitStr.length; i++) {
-                        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-                    }
-                    this.state.stationName = splitStr.join(" ");
-                }
-                if (this.state.stationName[this.state.stationName.length-1] === " ") {
-                    this.state.stationName = this.state.stationName.substring(0, this.state.stationName.length - 1);
-                }
+                
                 var search = 'https://ratbv-scraper.herokuapp.com/schedule?station=' + this.state.stationName;
-                console.log(search);
+
                 fetch(search)
                     .then(function (response) {
                         return response.json();
                     })
                     .then((myJson) => {
-                        console.log(myJson.data);
+
                         this.setState({ stationSearch: myJson.data, status: myJson.status.err });
                     })
             })
@@ -92,12 +83,18 @@ export default class Stations extends React.Component {
                 Object.keys(this.state.allRoutes).map((key) => {
 
                     if (key === item) {
+                        var TempRoute = Object.values(this.state.allRoutes[key])[1]
+                        
+                        TempRoute = TempRoute.replace("Ceta?ii", "Cetații")
+                        TempRoute = TempRoute.replace("Grivi?ei", "Griviței")
+                        TempRoute = TempRoute.replace("Bra?ov", "Brașov")
+
                         table.push(
                             <View style={styles.gradient} key={item}>
                                 <LinearGradient colors={['#9d73fd', '#012853']}>
                                     <TouchableOpacity style={styles.listStation} onPress={() => { table = []; navigate('Line', { titleLine: item, dataLine: this.state.stationSearch[item], route: Object.values(this.state.allRoutes[key])[1], stationName: this.state.stationName }) }}>
                                         <Text style={styles.textLine}> {item}</Text>
-                                        <Text style={styles.textRoute}>{"\n"}{"\n"}{Object.values(this.state.allRoutes[key])[1]}</Text>
+                                        <Text style={styles.textRoute}>{"\n"}{"\n"}{TempRoute}</Text>
                                         <Icon name="chevron-circle-right" size={25} color="white" style={styles.icon} />
                                     </TouchableOpacity>
                                 </LinearGradient>

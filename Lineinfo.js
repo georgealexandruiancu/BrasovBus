@@ -181,7 +181,7 @@ export default class Lineinfo extends React.Component {
     errorForUser() {
 
         if (this.state.selectedOne === false) {
-            let display = this.state.showText ? "Te rugam sa alegi perioada (L-V / S-D)" : ' ';
+            let display = this.state.showText ? "Te rugăm să alegi perioada (L-V / S-D)" : ' ';
             return (
                 <Text style={styles.err}>{display}</Text>
             )

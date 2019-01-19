@@ -6,7 +6,7 @@
  * @flow
  */
 
-import { createStackNavigator, createNavigator, StackRouter} from 'react-navigation';
+import { createStackNavigator, createNavigator, StackRouter, createAppContainer} from 'react-navigation';
 import React  from 'react';
 import HomeScreen from './HomeScreen';
 import Stations from './Stations';
@@ -15,7 +15,7 @@ import Searchline from './Searchline';
 import Lineinfo from './Lineinfo';
 
 
-const App = createStackNavigator({
+const RootStack = createStackNavigator({
   Home: {
     screen: HomeScreen
   },
@@ -32,5 +32,5 @@ const App = createStackNavigator({
     screen: Lineinfo
   }
 });
-
+const App = createAppContainer(RootStack)
 export default App;

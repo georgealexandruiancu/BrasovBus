@@ -145,21 +145,10 @@ android {
         }
     }
 }
-subprojects {
-  project.configurations.all {
-      afterEvaluate {project ->
-        if (project.hasProperty("android")) {
-            android {
-                compileSdkVersion 28
-                buildToolsVersion '28.0.2'
-            }
-        }
-    }
-  }
-}
+
 dependencies {
-    compile project(':react-native-splash-screen')
     compile project(':react-native-spinkit')
+    compile project(':react-native-splash-screen')
     compile project(':react-native-linear-gradient')
     compile project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])

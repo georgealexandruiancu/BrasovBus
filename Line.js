@@ -116,7 +116,7 @@ export default class Line extends React.Component {
     errorForUser() {
 
         if (this.state.selectedOne === false || this.state.selectedTwo === false) {
-            let display = this.state.showText ? "Te rugam sa alegi ruta (dus/intors) si data din saptamana (L-V / S-D)" : ' ';
+            let display = this.state.showText ? "Te rugăm să alegi ruta (dus/întors) și data din saptămână (L-V / S-D)" : ' ';
             return (
                 <Text style={styles.err}>{display}</Text>
             )
@@ -435,7 +435,7 @@ export default class Line extends React.Component {
         if (this.state.selectedSchedule !== "" && this.state.selectedTime !== "") {
             return (
                 <View>
-                    <Text style={styles.titleExpected}>Ajunge in statia {this.stationName} la: {this.state.expectedTime}</Text>
+                    <Text style={styles.titleExpected}>Ajunge în stația {this.stationName} la: {this.state.expectedTime}</Text>
                     <Text style={styles.hoursMinutes}>{this.state.exactTime}</Text>
                     <View style={styles.containerTable}>
                         <LinearGradient colors={['#9d73fd', '#012854']} style={{ borderRadius: 25 }}>
@@ -469,7 +469,7 @@ export default class Line extends React.Component {
                             this.viewTime('returned');
                         }}
                         underlayColor='#fff'>
-                        <Text style={styles.text}>{'Intors'.toLocaleUpperCase()}</Text>
+                        <Text style={styles.text}>{'Întors'.toLocaleUpperCase()}</Text>
                         <Icon name="chevron-circle-right" size={25} color="black" style={styles.iconRight} />
                     </TouchableOpacity>
                 </View>
@@ -486,12 +486,12 @@ export default class Line extends React.Component {
                         <Text style={styles.text}>{'Dus'.toLocaleUpperCase()}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.buttonModalRight}
+                        style={[styles.buttonModalRight, this.state.activeReturned && styles.active]}
                         onPress={() => {
                             this.viewTime('returned')
                         }}
                         underlayColor='#fff'>
-                        <Text style={styles.text}>{'Intors'.toLocaleUpperCase()}</Text>
+                        <Text style={styles.text}>{'Întors'.toLocaleUpperCase()}</Text>
                         <Icon name="chevron-circle-right" size={25} color="black" style={styles.iconRight} />
                     </TouchableOpacity>
                 </View>
@@ -501,7 +501,7 @@ export default class Line extends React.Component {
             return (
                 <View style={styles.container}>
                     <TouchableOpacity
-                        style={styles.buttonModalLeft}
+                        style={[styles.buttonModalLeft, this.state.activeGoing && styles.active]}                        
                         onPress={() => {
                             this.viewTime('going')
                         }}
@@ -513,7 +513,7 @@ export default class Line extends React.Component {
                         style={styles.buttonModalRightDisabled}
                         disabled={true}
                         underlayColor='#fff'>
-                        <Text style={styles.text}>{'Intors'.toLocaleUpperCase()}</Text>
+                        <Text style={styles.text}>{'Întors'.toLocaleUpperCase()}</Text>
                         <Icon name="chevron-circle-right" size={25} color="black" style={styles.iconRight} />
                     </TouchableOpacity>
                 </View>
@@ -662,7 +662,7 @@ const styles = StyleSheet.create({
     titleRoute: {
         paddingTop: 10,
         paddingBottom: 10,
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: '900',
         color: '#9d73fd',
         alignSelf: 'center',

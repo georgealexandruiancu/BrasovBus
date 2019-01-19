@@ -105,7 +105,7 @@ export default class HomeScreen extends React.Component {
                         <View style={styles.modal}>
                             <Image source={require('./assets/wave2.png')} style={styles.bgImages} resizeMode={'cover'} />
 
-                            <Text style={styles.textModal}>Cauta statia</Text>
+                            <Text style={styles.textModal}>Caută stația</Text>
                             {/* <TextInput editable={true} value={this.state.text} onChangeText={(text) => { this.setState({ text }) }} style={styles.input} /> */}
                             <SearchableDropdown
                                 onTextChange={(text) => { this.setState({ text }); console.log(this.state.text.name) }}
@@ -129,7 +129,7 @@ export default class HomeScreen extends React.Component {
                                 itemTextStyle={{ color: 'black' }}
                                 itemsContainerStyle={{ maxHeight: 140 }}
                                 items={this.state.tableStations}
-                                placeholder="Scrie statia"
+                                placeholder="Scrie stația"
                                 resetValue={false}
                                 underlineColorAndroid="transparent"
                                 value={this.state.textLine}
@@ -139,25 +139,25 @@ export default class HomeScreen extends React.Component {
                                 onPress={() => {
                                     if (this.state.text !== "") {
                                         if (this.state.itemSelect === false) {
-                                            alert('Te rugam selecteaza statia')
+                                            alert('Te rugăm selectează stația')
                                         } else {
                                             this.toggleModal(!this.state.modalVisible);
                                             navigate('Stations', { stationName: this.state.text.name });
                                             this.setState({ text: "" })
                                         }
                                     } else {
-                                        alert('Te rugam selecteaza statia');
+                                        alert('Te rugăm selectează stația');
 
                                     }
                                 }}
                                 underlayColor='#fff'>
-                                <Text style={styles.text}>{'Cauta'.toLocaleUpperCase()}</Text>
+                                <Text style={styles.text}>{'Caută'.toLocaleUpperCase()}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.buttonModal}
                                 onPress={() => this.toggleModal(!this.state.modalVisible)}
                                 underlayColor='#fff'>
-                                <Text style={styles.text}>{'Anuleaza'.toLocaleUpperCase()}</Text>
+                                <Text style={styles.text}>{'Anulează'.toLocaleUpperCase()}</Text>
                             </TouchableOpacity>
                         </View>
                     </Modal>
@@ -168,7 +168,7 @@ export default class HomeScreen extends React.Component {
                         <View style={styles.modal}>
                             <Image source={require('./assets/wave2.png')} style={styles.bgImages} resizeMode={'cover'} />
 
-                            <Text style={styles.textModal}>Cauta linia</Text>
+                            <Text style={styles.textModal}>Caută linia</Text>
                             {/* <TextInput editable={true} value={this.state.textLine} onChangeText={(textLine) => { this.setState({ textLine }) }} style={styles.input} /> */}
                             <SearchableDropdown
                                 onTextChange={(textLine) => { this.setState({ textLine }); console.log(this.state.textLine.name) }}
@@ -202,31 +202,31 @@ export default class HomeScreen extends React.Component {
                                 onPress={() => {
                                     if (this.state.textLine !== "") {
                                         if (this.state.itemSelect === false) {
-                                            alert('Te rugam selecteaza statia');
+                                            alert('Te rugăm selectează stația');
                                         } else {
                                             this.toggleModalLine(!this.state.modalVisibleLine);
                                             navigate('Searchline', { lineName: this.state.textLine.name });
                                             this.setState({ textLine: "" })
                                         }
                                     } else {
-                                        alert('Te rugam selecteaza statia');
+                                        alert('Te rugăm selectează stația');
                                     }
                                 }}
                                 underlayColor='#fff'>
-                                <Text style={styles.text}>{'Cauta'.toLocaleUpperCase()}</Text>
+                                <Text style={styles.text}>{'Caută'.toLocaleUpperCase()}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.buttonModal}
                                 onPress={() => this.toggleModalLine(!this.state.modalVisibleLine)}
                                 underlayColor='#fff'>
-                                <Text style={styles.text}>{'Anuleaza'.toLocaleUpperCase()}</Text>
+                                <Text style={styles.text}>{'Anulează'.toLocaleUpperCase()}</Text>
                             </TouchableOpacity>
                         </View>
                     </Modal>
                     <View style={styles.container}>
                         <TouchableHighlight onPress={this.toggleModal.bind(this, true)} style={styles.buttonOpenModal} underlayColor={'transparent'}>
                             <Text style={styles.textOpenModal}>
-                                Cauta statia {"  "}
+                                Caută stația {"  "}
                                 <Icon name="map-signs" size={25} color="white" style={{ paddingLeft: 20 }} />
                             </Text>
                         </TouchableHighlight>
@@ -234,7 +234,7 @@ export default class HomeScreen extends React.Component {
                     <View style={styles.container2}>
                         <TouchableOpacity onPress={this.toggleModalLine.bind(this, true)} style={styles.buttonOpenModalLine} underlayColor={'transparent'}>
                             <Text style={styles.textOpenModal}>
-                                Cauta linia {"  "}
+                                Caută linia {"  "}
                                 <Icon name="bus" size={25} color="white" style={{ paddingLeft: 20 }} />
                             </Text>
                         </TouchableOpacity>
@@ -253,7 +253,11 @@ export default class HomeScreen extends React.Component {
     render() {
         const { navigate } = this.props.navigation;
         return (
-                this.CheckView()
+            <View style={{ flex: 1, }}>
+                <Image source={require('./assets/wave.png')} style={styles.bgMain} resizeMode={'cover'} />
+                {this.CheckView()}
+
+            </View>
         );
     }
 }
@@ -272,10 +276,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#3b37fe',
         borderRadius: 25,
         color: 'white',
-        width: 80+"%",
+        width: 60+"%",
         left: 50+"%",
         transform: [
-            { translateX: - dimensions.width/2.5 },
+            { translateX: - dimensions.width/3.2 },
         ],
     },
     container2: {
@@ -287,10 +291,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#3b37fe',
         borderRadius: 25,
         color: 'white',
-        width: 80 + "%",
+        width: 60 + "%",
         left: 50 + "%",
         transform: [
-            { translateX: - dimensions.width / 2.5 },
+            { translateX: - dimensions.width / 3.2 },
         ],
         marginTop: 20,
     },
@@ -325,7 +329,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '900',
         letterSpacing: 1,
-        fontSize: 25,
+        fontSize: 22,
     },
     textOpenModal: {
         color: 'white',

@@ -25,7 +25,7 @@ export default class Stations extends React.Component {
         selectedOne: false,
     };
     static navigationOptions = {
-        title: 'Statii',
+        title: 'Stații',
     };
     componentDidMount() {
         this._isMounted = true;
@@ -64,7 +64,7 @@ export default class Stations extends React.Component {
     errorForUser() {
 
         if (this.state.selectedOne === false ) {
-            let display = this.state.showText ? "Te rugam sa alegi ruta (dus/intors)" : ' ';
+            let display = this.state.showText ? "Te rugăm să alegi ruta (dus/întors)" : ' ';
             return (
                 <Text style={styles.err}>{display}</Text>
             )
@@ -118,7 +118,7 @@ export default class Stations extends React.Component {
             }
             else if (this.state.error === 1) {
                 return (
-                    <Text> Avem niste probleme, lucram la mentenanta :(, Ne pare rau!</Text>
+                    <Text> Avem niște probleme, lucrăm la mentenanță :(, Ne pare rău!</Text>
                 )
             }
             else {
@@ -153,7 +153,7 @@ export default class Stations extends React.Component {
                         style={[styles.buttonModalRight, this.state.activeReturned && styles.active]}
                         onPress={() => { this.setState({ departure: 'returned', activeGoing: false, activeReturned: true, selectedOne: true, selectedOne: true }) }}
                         underlayColor='#fff'>
-                        <Text style={styles.text}>{'Intors'.toLocaleUpperCase()}</Text>
+                        <Text style={styles.text}>{'Întors'.toLocaleUpperCase()}</Text>
                         <Icon name="chevron-circle-right" size={25} color="black" style={styles.iconRight} />
                     </TouchableOpacity>
                 </View>
