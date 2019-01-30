@@ -26,6 +26,18 @@ export default class Stations extends React.Component {
     };
     static navigationOptions = {
         title: 'Stații',
+        backButton: {
+            color: "white",
+        },
+        headerTintColor: 'white',
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerStyle: {
+            backgroundColor: '#3b37fe',
+            color: 'white'
+        },
+        titleStyle: { color: 'white' },
     };
     componentDidMount() {
         this._isMounted = true;

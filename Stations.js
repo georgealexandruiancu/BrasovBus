@@ -21,7 +21,19 @@ export default class Stations extends React.Component {
         clickOnce: 0
     };
     static navigationOptions = {
+        backButton: {
+            color: "white",
+        },
         title: 'Linii',
+        headerTintColor: 'white',
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerStyle: {
+            backgroundColor: '#3b37fe',
+            color: 'white'
+        },
+        titleStyle: { color: 'white' },
     };
     componentDidMount() {
 
@@ -49,6 +61,9 @@ export default class Stations extends React.Component {
                     .then((myJson) => {
 
                         this.setState({ stationSearch: myJson.data, status: myJson.status.err });
+                    })
+                    .then(() => {
+                        console.log(this.state.stationSearch)
                     })
             })
             .catch(error => {
@@ -84,7 +99,12 @@ export default class Stations extends React.Component {
 
                     if (key === item) {
                         var TempRoute = Object.values(this.state.allRoutes[key])[1]
-                        
+                        TempRoute = TempRoute.split("-");
+                        if(TempRoute.length < 3){
+                            TempRoute = TempRoute[1] + " - " + TempRoute[0]
+                        }else{
+                            TempRoute = TempRoute[2] + " - " + TempRoute[1] + " - " + TempRoute[0]
+                        }
                         TempRoute = TempRoute.replace("Ceta?ii", "Cetații")
                         TempRoute = TempRoute.replace("Grivi?ei", "Griviței")
                         TempRoute = TempRoute.replace("Bra?ov", "Brașov")
@@ -92,7 +112,7 @@ export default class Stations extends React.Component {
                         table.push(
                             <View style={styles.gradient} key={item}>
                                 <LinearGradient colors={['#9d73fd', '#012853']}>
-                                    <TouchableOpacity style={styles.listStation} onPress={() => { table = []; navigate('Line', { titleLine: item, dataLine: this.state.stationSearch[item], route: Object.values(this.state.allRoutes[key])[1], stationName: this.state.stationName }) }}>
+                                    <TouchableOpacity style={styles.listStation} onPress={() => { table = []; navigate('Line', { titleLine: item, dataLine: this.state.stationSearch[item], route: TempRoute, stationName: this.state.stationName }) }}>
                                         <Text style={styles.textLine}> {item}</Text>
                                         <Text style={styles.textRoute}>{"\n"}{"\n"}{TempRoute}</Text>
                                         <Icon name="chevron-circle-right" size={25} color="white" style={styles.icon} />

@@ -19,6 +19,20 @@ import BottomNav from './BottomNav';
 const timing = 500;
 
 export default class Lineinfo extends React.Component {
+    static navigationOptions = {
+        backButton: {
+            color: "white",
+        },
+        headerTintColor: 'white',
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerStyle: {
+            backgroundColor: '#3b37fe',
+            color: 'white'
+        },
+        titleStyle: { color: 'white' },
+    };
     navigate = this.props.navigation;
     titleStation = this.navigate.getParam('titleStation');
     dataLine = this.navigate.getParam('dataLine');

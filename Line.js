@@ -20,7 +20,18 @@ const timing = 500;
 
 export default class Line extends React.Component {
     static navigationOptions = {
-
+        backButton: {
+            color: "white",
+        },
+        headerTintColor: 'white',
+        headerTitleStyle: {
+            color: 'white',
+        },
+        headerStyle: {
+            backgroundColor: '#3b37fe',
+            color: 'white'
+        },
+        titleStyle: { color: 'white' },
     };
     constructor(props) {
         super(props);
@@ -51,7 +62,7 @@ export default class Line extends React.Component {
 
     componentDidMount() {
         this._isMounted = true;
-
+       
         if (this._isMounted === true) {
             if (typeof this.dataLine.dus !== 'undefined') {
                 this.setState({
@@ -345,18 +356,18 @@ export default class Line extends React.Component {
             diffHour: ''
         });
         for (let i = 0; i < allHours.length; i++) {
-            console.log(allHours[i])
+          
             if (myDate < allHours[i]) {
 
                 var date1 = new Date();
                 var date2 = new Date();
                 let expectedTime = allHours[i].split(":");
                 if (expectedTime[1] != "[]") {
-                    console.log(expectedTime[1])
+                   
                     let TimeStar = expectedTime[1].split("*");
-                    console.log(TimeStar)
+                   
                     if (TimeStar[1] === "") {
-                        console.log(TimeStar[1])
+                      
                         this.setState({ expectedTime: allHours[i] });
                         let myTime = myDate.split(":");
                         date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
@@ -389,7 +400,7 @@ export default class Line extends React.Component {
                     i++;
                     let expectedTime = allHours[i].split(":");
                     if (expectedTime[1] != "[]") {
-                        console.log(expectedTime[1])
+                       
                         var TimeStar = expectedTime[1].split("*");
                         if (TimeStar[1] === "") {
                             this.setState({ expectedTime: allHours[i] });

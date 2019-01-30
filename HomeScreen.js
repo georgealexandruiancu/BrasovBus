@@ -17,6 +17,7 @@ export default class HomeScreen extends React.Component {
             color: 'white',
             fontSize: 20,
         },
+        
         title: 'BRASOV BUS',
         headerStyle: {
             backgroundColor: '#3b37fe',
