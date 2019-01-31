@@ -10,9 +10,9 @@ export default class Stations extends React.Component {
     constructor(props) {
         super(props);
         this._isMounted = false;
-        setInterval(() => {
-            this.setState({ showText: !this.state.showText });
-        }, 800);
+        // setInterval(() => {
+        //     this.setState({ showText: !this.state.showText });
+        // }, 800);
     }
     navigate = this.props.navigation;
     state = {
@@ -23,6 +23,7 @@ export default class Stations extends React.Component {
         activeGoing: false,
         activeReturned: false,
         selectedOne: false,
+        showText: true,
     };
     static navigationOptions = {
         title: 'Stații',
@@ -175,7 +176,7 @@ export default class Stations extends React.Component {
     }
 }
 const styles = StyleSheet.create({
-    err: { padding: 20, color: '#9d73fd', textAlign: 'center', fontWeight: '700', height: 75 },
+    err: { padding: 20, color: '#f44242', textAlign: 'center', fontWeight: '700', height: 75 },
     spinner: {
         alignSelf: 'center',
         marginTop: 150,

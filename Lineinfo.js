@@ -52,9 +52,9 @@ export default class Lineinfo extends React.Component {
             activeWeek: false,
             activeWeekend: false,
         }
-        setInterval(() => {
-            this.setState({ showText: !this.state.showText });
-        }, 800);
+        // setInterval(() => {
+        //     this.setState({ showText: !this.state.showText });
+        // }, 800);
         this._isMounted = false;
     }
     componentDidMount(){
@@ -239,7 +239,7 @@ export default class Lineinfo extends React.Component {
     }
 }
 const styles = StyleSheet.create({
-    err: { padding: 20, color: '#9d73fd', textAlign: 'center', fontWeight: '700', height: 75 },
+    err: { padding: 20, color: '#f44242', textAlign: 'center', fontWeight: '700', height: 75 },
     containerTable: { padding: 20, borderRadius: 50 },
     head: { height: 60, backgroundColor: '#000', borderRadius: 25, paddingTop: 10, paddingBottom: 10, },
     text: { paddingTop: 10, paddingBottom: 10, backgroundColor: '#000', color: 'black' },

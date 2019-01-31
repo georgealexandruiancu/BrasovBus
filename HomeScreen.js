@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Image, Modal, Text, TouchableHighlight, View, TextInput, StyleSheet, TouchableOpacity, Dimensions, BackHandler } from 'react-native';
+import { Image, Modal, Text, TouchableHighlight, View, TextInput, StyleSheet, TouchableOpacity, Dimensions, BackHandler, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import Spinner from 'react-native-spinkit';
@@ -131,6 +131,7 @@ export default class HomeScreen extends React.Component {
                                 itemsContainerStyle={{ maxHeight: 140 }}
                                 items={this.state.tableStations}
                                 placeholder="Scrie stația"
+                                placeholderTextColor="white"
                                 resetValue={false}
                                 underlineColorAndroid="transparent"
                                 value={this.state.textLine}
@@ -140,14 +141,28 @@ export default class HomeScreen extends React.Component {
                                 onPress={() => {
                                     if (this.state.text !== "") {
                                         if (this.state.itemSelect === false) {
-                                            alert('Te rugăm selectează stația')
+                                            Alert.alert(
+                                                'Date invalide !',
+                                                'Te rugăm selectează stația',
+                                                [
+                                                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                                                ],
+                                                { cancelable: false },
+                                            );
                                         } else {
                                             this.toggleModal(!this.state.modalVisible);
                                             navigate('Stations', { stationName: this.state.text.name });
-                                            this.setState({ text: "" })
+                                            this.setState({ text: "", itemSelect: false })
                                         }
                                     } else {
-                                        alert('Te rugăm selectează stația');
+                                        Alert.alert(
+                                            'Date invalide !',
+                                            'Te rugăm selectează stația',
+                                            [
+                                                { text: 'OK', onPress: () => console.log('OK Pressed') },
+                                            ],
+                                            { cancelable: false },
+                                        );
 
                                     }
                                 }}
@@ -194,6 +209,7 @@ export default class HomeScreen extends React.Component {
                                 itemsContainerStyle={{ maxHeight: 140 }}
                                 items={this.state.tableLines}
                                 placeholder="Scrie linia"
+                                placeholderTextColor="white"
                                 resetValue={false}
                                 underlineColorAndroid="transparent"
                                 value={this.state.textLine}
@@ -203,14 +219,28 @@ export default class HomeScreen extends React.Component {
                                 onPress={() => {
                                     if (this.state.textLine !== "") {
                                         if (this.state.itemSelect === false) {
-                                            alert('Te rugăm selectează stația');
+                                            Alert.alert(
+                                                'Date invalide !',
+                                                'Te rugăm selectează linia',
+                                                [
+                                                    { text: 'OK', onPress: () => console.log('OK Pressed') },
+                                                ],
+                                                { cancelable: false },
+                                            );
                                         } else {
                                             this.toggleModalLine(!this.state.modalVisibleLine);
                                             navigate('Searchline', { lineName: this.state.textLine.name });
-                                            this.setState({ textLine: "" })
+                                            this.setState({ textLine: "", itemSelect: false })
                                         }
                                     } else {
-                                        alert('Te rugăm selectează stația');
+                                        Alert.alert(
+                                            'Date invalide !',
+                                            'Te rugăm selectează linia',
+                                            [
+                                                { text: 'OK', onPress: () => console.log('OK Pressed') },
+                                            ],
+                                            { cancelable: false },
+                                        );
                                     }
                                 }}
                                 underlayColor='#fff'>

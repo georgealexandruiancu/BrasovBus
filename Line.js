@@ -49,20 +49,23 @@ export default class Line extends React.Component {
             activeWeek: false,
             activeWeekend: false,
         }
-        setInterval(() => {
-            this.setState({ showText: !this.state.showText });
-        }, 800);
+        // setInterval(() => {
+        //     this.setState({ showText: !this.state.showText });
+        // }, 800);
         this._isMounted = false;
     }
     navigate = this.props.navigation;
     titleLine = this.navigate.getParam('titleLine');
     dataLine = this.navigate.getParam('dataLine');
     route = this.navigate.getParam('route');
+   
     stationName = this.navigate.getParam('stationName');
-
+    
     componentDidMount() {
         this._isMounted = true;
-       
+        this.route = this.route.replace("Ceta?ii", "Cetații")
+        this.route = this.route.replace("Grivi?ei", "Griviței")
+        this.route = this.route.replace("Bra?ov", "Brașov")
         if (this._isMounted === true) {
             if (typeof this.dataLine.dus !== 'undefined') {
                 this.setState({
@@ -87,8 +90,14 @@ export default class Line extends React.Component {
         var newRoute;
         if (reverseRoute.length < 3) {
             newRoute = reverseRoute[1] + ' - ' + reverseRoute[0];
+            newRoute = newRoute.replace("Ceta?ii", "Cetații")
+            newRoute = newRoute.replace("Grivi?ei", "Griviței")
+            newRoute = newRoute.replace("Bra?ov", "Brașov")
         } else {
             newRoute = reverseRoute[2] + ' - ' + reverseRoute[1] + ' - ' + reverseRoute[0];
+            newRoute = newRoute.replace("Ceta?ii", "Cetații")
+            newRoute = newRoute.replace("Grivi?ei", "Griviței")
+            newRoute = newRoute.replace("Bra?ov", "Brașov")
         }
         return newRoute;
     }
@@ -107,7 +116,8 @@ export default class Line extends React.Component {
                 selectedTime: '',
                 selectedTwo: false
             });
-            this.route = this.navigate.getParam('route');
+            this.route = this.reverseRoute()
+            
         } else if (departure === 'returned') {
             this.setState({ selectedSchedule: 'returned', selectedOne: true })
             this.setState({ activeGoing: false, activeReturned: true })
@@ -121,7 +131,10 @@ export default class Line extends React.Component {
                 selectedTime: '',
                 selectedTwo: false
             });
-            this.route = this.reverseRoute();
+            this.route = this.navigate.getParam('route');
+            this.route = this.route.replace("Ceta?ii", "Cetații")
+            this.route = this.route.replace("Grivi?ei", "Griviței")
+            this.route = this.route.replace("Bra?ov", "Brașov")
         }
     }
     errorForUser() {
@@ -373,8 +386,11 @@ export default class Line extends React.Component {
                         date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
                         date2.setHours(expectedTime[0]); date2.setMinutes(TimeStar[0]);
                         var msec = date2 - date1;
-                        var mins = Math.floor(msec / 60000);
-                        var hrs = Math.floor(mins / 60);
+                        var mins = parseInt((msec / (1000 * 60)) % 60)
+                        var hrs = parseInt((msec / (1000 * 60 * 60)) % 24);
+
+                        hrs = (hrs < 10) ? "0" + hrs : hrs;
+                        mins = (mins < 10) ? "0" + mins : mins;
                         if (hrs != 0) {
                             this.setState({ exactTime: hrs + " ore " + mins + " minute" })
                         } else {
@@ -386,8 +402,11 @@ export default class Line extends React.Component {
                         date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
                         date2.setHours(expectedTime[0]); date2.setMinutes(expectedTime[1]);
                         var msec = date2 - date1;
-                        var mins = Math.floor(msec / 60000);
-                        var hrs = Math.floor(mins / 60);
+                        var mins = parseInt((msec / (1000 * 60)) % 60)
+                        var hrs = parseInt((msec / (1000 * 60 * 60)) % 24);
+
+                        hrs = (hrs < 10) ? "0" + hrs : hrs;
+                        mins = (mins < 10) ? "0" + mins : mins;
                         if (hrs != 0) {
                             this.setState({ exactTime: hrs + " ore " + mins + " minute" })
                         } else {
@@ -408,8 +427,11 @@ export default class Line extends React.Component {
                             date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
                             date2.setHours(expectedTime[0]); date2.setMinutes(TimeStar[0]);
                             var msec = date2 - date1;
-                            var mins = Math.floor(msec / 60000);
-                            var hrs = Math.floor(mins / 60);
+                            var mins = parseInt((msec / (1000 * 60)) % 60)
+                            var hrs = parseInt((msec / (1000 * 60 * 60)) % 24);
+
+                            hrs = (hrs < 10) ? "0" + hrs : hrs;
+                            mins = (mins < 10) ? "0" + mins : mins;
                             if (hrs != 0) {
                                 this.setState({ exactTime: hrs + " ore " + mins + " minute" })
                             } else {
@@ -421,8 +443,11 @@ export default class Line extends React.Component {
                             date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
                             date2.setHours(expectedTime[0]); date2.setMinutes(expectedTime[1]);
                             var msec = date2 - date1;
-                            var mins = Math.floor(msec / 60000);
-                            var hrs = Math.floor(mins / 60);
+                            var mins = parseInt((msec / (1000 * 60)) % 60)
+                            var hrs = parseInt((msec / (1000 * 60 * 60)) % 24);
+
+                            hrs = (hrs < 10) ? "0" + hrs : hrs;
+                            mins = (mins < 10) ? "0" + mins : mins;
                             if (hrs != 0) {
                                 this.setState({ exactTime: hrs + " ore " + mins + " minute" })
                             } else {
@@ -568,7 +593,7 @@ export default class Line extends React.Component {
     }
 }
 const styles = StyleSheet.create({
-    err: { padding: 20, color: '#9d73fd', textAlign: 'center', fontWeight: '700', height: 75 },
+    err: { padding: 20, color: '#f44242', textAlign: 'center', fontWeight: '700', height: 75 },
     containerTable: { padding: 20, borderRadius: 50 },
     head: { height: 60, backgroundColor: '#000', borderRadius: 25, paddingTop: 10, paddingBottom: 10, },
     text: { paddingTop: 10, paddingBottom: 10, backgroundColor: '#000', color: 'black' },
