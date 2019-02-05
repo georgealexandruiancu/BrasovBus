@@ -24,6 +24,8 @@ export default class Stations extends React.Component {
         activeReturned: false,
         selectedOne: false,
         showText: true,
+        errorSearch: true,
+        lineSearch: ''
     };
     static navigationOptions = {
         title: 'Stații',
@@ -63,20 +65,27 @@ export default class Stations extends React.Component {
                 return response.json();
             })
             .then((myJson) => {
-
-                if (this._isMounted) {
+                console.log(myJson.status.err);
+                if(myJson.status.err === false){
+                    if (this._isMounted) {
+                        this.setState({
+                            lineSearch: {
+                                going: myJson.data[this.state.lineName].dus,
+                                returned: myJson.data[this.state.lineName].intors,
+                            },
+                            errorSearch: false
+                        });
+                    }
+                }else{
                     this.setState({
-                        lineSearch: {
-                            going: myJson.data[this.state.lineName].dus,
-                            returned: myJson.data[this.state.lineName].intors,
-                        }
-                    });
+                        errorSearch: true
+                    })
                 }
             })
     }
     errorForUser() {
 
-        if (this.state.selectedOne === false ) {
+        if (this.state.selectedOne === false && this.state.errorSearch !== true && this.state.lineSearch !== "") {
             let display = this.state.showText ? "Te rugăm să alegi ruta (dus/întors)" : ' ';
             return (
                 <Text style={styles.err}>{display}</Text>
@@ -85,6 +94,34 @@ export default class Stations extends React.Component {
     }
     componentWillUnmount() {
         this._isMounted = false;
+    }
+    viewDS = () => {
+        if (this.state.errorSearch === true && this.state.lineSearch === "") {
+            return (
+                <View style={styles.container}>
+                    <Text>Nu am gasit nici un rezultat. Incearca din nou !</Text>
+                </View>
+            )
+        } else {
+            return (
+                <View style={styles.container}>
+                    <TouchableOpacity
+                        style={[styles.buttonModalLeft, this.state.activeGoing && styles.active]}
+                        onPress={() => { this.setState({ departure: 'going', activeGoing: true, activeReturned: false, selectedOne: true, selectedOne: true }) }}
+                        underlayColor='#fff'>
+                        <Icon name="chevron-circle-left" size={25} color="black" style={styles.iconLeft} />
+                        <Text style={styles.text}>{'Dus'.toLocaleUpperCase()}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.buttonModalRight, this.state.activeReturned && styles.active]}
+                        onPress={() => { this.setState({ departure: 'returned', activeGoing: false, activeReturned: true, selectedOne: true, selectedOne: true }) }}
+                        underlayColor='#fff'>
+                        <Text style={styles.text}>{'Întors'.toLocaleUpperCase()}</Text>
+                        <Icon name="chevron-circle-right" size={25} color="black" style={styles.iconRight} />
+                    </TouchableOpacity>
+                </View>
+            )
+        }
     }
     viewComponent = () => {
         const { navigate } = this.props.navigation;
@@ -110,12 +147,12 @@ export default class Stations extends React.Component {
                     <Text> Avem niste probleme, lucram la mentenanta :(, Ne pare rau!</Text>
                 )
             }
-            else {
+            else{
                 return (
                     <Spinner style={styles.spinner} color={'#9d73fd'} size={100} type={'Wave'} />
                 )
             }
-            if (typeof this.state.lineSearch.returned !== 'undefined' && this.state.error !== 1) {
+            if (typeof this.state.lineSearch.returned !== 'undefined' && this.state.error !== 1 && this.state.errorSearch !== true && this.state.lineSearch !== "") {
                 Object.keys(this.state.lineSearch.returned).map((item) => {
                     tableReturned.push(
                         <View style={styles.gradient} key={item}>
@@ -134,7 +171,7 @@ export default class Stations extends React.Component {
                     <Text> Avem niște probleme, lucrăm la mentenanță :(, Ne pare rău!</Text>
                 )
             }
-            else {
+            else{
                 return (
                     <Spinner style={styles.spinner} color={'#9d73fd'} size={100} type={'Wave'} />
                 )
@@ -152,24 +189,7 @@ export default class Stations extends React.Component {
         return (
             <ScrollView>
                 {this.errorForUser()}
-                
-                <View style={styles.container}>
-
-                    <TouchableOpacity
-                        style={[styles.buttonModalLeft, this.state.activeGoing && styles.active]}
-                        onPress={() => { this.setState({ departure: 'going', activeGoing: true, activeReturned: false, selectedOne: true, selectedOne: true }) }}
-                        underlayColor='#fff'>
-                        <Icon name="chevron-circle-left" size={25} color="black" style={styles.iconLeft} />
-                        <Text style={styles.text}>{'Dus'.toLocaleUpperCase()}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[styles.buttonModalRight, this.state.activeReturned && styles.active]}
-                        onPress={() => { this.setState({ departure: 'returned', activeGoing: false, activeReturned: true, selectedOne: true, selectedOne: true }) }}
-                        underlayColor='#fff'>
-                        <Text style={styles.text}>{'Întors'.toLocaleUpperCase()}</Text>
-                        <Icon name="chevron-circle-right" size={25} color="black" style={styles.iconRight} />
-                    </TouchableOpacity>
-                </View>
+                {this.viewDS()}
                 {this.viewComponent()}
             </ScrollView>
         );

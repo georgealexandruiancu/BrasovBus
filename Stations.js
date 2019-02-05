@@ -18,7 +18,8 @@ export default class Stations extends React.Component {
         allRoutes: '',
         stationSearch: '',
         error: 0,
-        clickOnce: 0
+        clickOnce: 0,
+        allRoutesTemp: ""
     };
     static navigationOptions = {
         backButton: {
@@ -51,9 +52,7 @@ export default class Stations extends React.Component {
                 }
             })
             .then(() => {
-                
                 var search = 'https://ratbv-scraper.herokuapp.com/schedule?station=' + this.state.stationName;
-
                 fetch(search)
                     .then(function (response) {
                         return response.json();
@@ -63,8 +62,33 @@ export default class Stations extends React.Component {
                         this.setState({ stationSearch: myJson.data, status: myJson.status.err });
                     })
                     .then(() => {
-                        console.log(this.state.stationSearch)
+                        var allRoutesTemp = []
+                        
+                        Object.keys(this.state.stationSearch).map((key) => {
+                            let getDetailsRoute = 'https://ratbv-scraper.herokuapp.com/schedule?route=' + key;
+                            fetch(getDetailsRoute)
+                                .then(function (response) {
+                                    return response.json();
+                                })
+                                .then((myJson) => {
+                                    
+                                    allRoutesTemp.push({
+                                        [key]: {
+                                            url: '',
+                                            descriere: Object.keys(myJson.data[key].dus)[0] + " - " + Object.keys(myJson.data[key].intors)[0]
+                                        }
+                                    })
+                                    this.setState({ allRoutesTemp });
+
+                                })
+                                
+                        });
+                        
                     })
+                    .then(()=>{
+                    })
+
+                   
             })
             .catch(error => {
                 this.setState({ error: 1 });
@@ -84,7 +108,6 @@ export default class Stations extends React.Component {
     }
     viewComponent = () => {
         const { navigate } = this.props.navigation;
-        var table = [];
 
         if (this.state.status === true) {
 
@@ -92,37 +115,41 @@ export default class Stations extends React.Component {
                 <Text style={styles.textErr}> Nu am gasit nici un rezultat pentru {this.state.stationName}. Incearca din nou !</Text>
             )
         }
-        else if (this.state.stationSearch !== '' && this.state.error !== 1) {
+        else if (this.state.stationSearch !== '' && this.state.error !== 1 && this.state.allRoutesTemp !== "") {
+          
+            var table = [];
+
             Object.keys(this.state.stationSearch).map((item) => {
+                this.state.allRoutesTemp.forEach((route) =>{
+                    Object.keys(route).map((key) => {
+                    
+                        if (key === item) {
+                
+                            var TempRoute = Object.values(route[key])[1]
+                            // TempRoute = TempRoute.split("-");
+                            // if(TempRoute.length < 3){
+                            //     TempRoute = TempRoute[1] + " - " + TempRoute[0]
+                            // }else{
+                            //     TempRoute = TempRoute[2] + " - " + TempRoute[1] + " - " + TempRoute[0]
+                            // }
+                            TempRoute = TempRoute.replace("Ceta?ii", "Cetații")
+                            TempRoute = TempRoute.replace("Grivi?ei", "Griviței")
+                            TempRoute = TempRoute.replace("Bra?ov", "Brașov")
 
-                Object.keys(this.state.allRoutes).map((key) => {
-
-                    if (key === item) {
-                        var TempRoute = Object.values(this.state.allRoutes[key])[1]
-                        // TempRoute = TempRoute.split("-");
-                        // if(TempRoute.length < 3){
-                        //     TempRoute = TempRoute[1] + " - " + TempRoute[0]
-                        // }else{
-                        //     TempRoute = TempRoute[2] + " - " + TempRoute[1] + " - " + TempRoute[0]
-                        // }
-                        TempRoute = TempRoute.replace("Ceta?ii", "Cetații")
-                        TempRoute = TempRoute.replace("Grivi?ei", "Griviței")
-                        TempRoute = TempRoute.replace("Bra?ov", "Brașov")
-
-                        table.push(
-                            <View style={styles.gradient} key={item}>
-                                <LinearGradient colors={['#9d73fd', '#012853']}>
-                                    <TouchableOpacity style={styles.listStation} onPress={() => { table = []; navigate('Line', { titleLine: item, dataLine: this.state.stationSearch[item], route: Object.values(this.state.allRoutes[key])[1], stationName: this.state.stationName }) }}>
-                                        <Text style={styles.textLine}> {item}</Text>
-                                        <Text style={styles.textRoute}>{"\n"}{"\n"}{TempRoute}</Text>
-                                        <Icon name="chevron-circle-right" size={25} color="white" style={styles.icon} />
-                                    </TouchableOpacity>
-                                </LinearGradient>
-                            </View>
-                        )
-                    }
+                            table.push(
+                                <View style={styles.gradient} key={item}>
+                                    <LinearGradient colors={['#9d73fd', '#012853']}>
+                                        <TouchableOpacity style={styles.listStation} onPress={() => { table = []; navigate('Line', { titleLine: item, dataLine: this.state.stationSearch[item], route: Object.values(route[key])[1], stationName: this.state.stationName }) }}>
+                                            <Text style={styles.textLine}> {item}</Text>
+                                            <Text style={styles.textRoute}>{"\n"}{"\n"}{TempRoute}</Text>
+                                            <Icon name="chevron-circle-right" size={25} color="white" style={styles.icon} />
+                                        </TouchableOpacity>
+                                    </LinearGradient>
+                                </View>
+                            )
+                        }
+                    })
                 })
-
             })
             return table;
         }

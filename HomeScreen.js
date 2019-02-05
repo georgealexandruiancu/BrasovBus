@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '900',
         letterSpacing: 1,
-        fontSize: 25,
+        fontSize: 22,
     },
     input:{
         borderBottomWidth: 2,

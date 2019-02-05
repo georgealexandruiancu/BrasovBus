@@ -58,9 +58,9 @@ export default class Line extends React.Component {
     titleLine = this.navigate.getParam('titleLine');
     dataLine = this.navigate.getParam('dataLine');
     route = this.navigate.getParam('route');
-   
+
     stationName = this.navigate.getParam('stationName');
-    
+
     componentDidMount() {
         this._isMounted = true;
         this.route = this.route.replace("Ceta?ii", "Cetații")
@@ -74,6 +74,8 @@ export default class Line extends React.Component {
                         sambataDuminica: this.dataLine.dus[this.stationName].sambataDuminica
                     }
                 });
+                console.log(this.dataLine.dus);
+
             }
             if (typeof this.dataLine.intors !== 'undefined') {
                 this.setState({
@@ -82,7 +84,10 @@ export default class Line extends React.Component {
                         sambataDuminica: this.dataLine.intors[this.stationName].sambataDuminica
                     },
                 });
+                console.log(this.dataLine.intors);
+
             }
+
         }
     }
     reverseRoute() {
@@ -116,8 +121,11 @@ export default class Line extends React.Component {
                 selectedTime: '',
                 selectedTwo: false
             });
-            this.route = this.reverseRoute()
-            
+            this.route = this.navigate.getParam('route');
+            this.route = this.route.replace("Ceta?ii", "Cetații")
+            this.route = this.route.replace("Grivi?ei", "Griviței")
+            this.route = this.route.replace("Bra?ov", "Brașov")
+
         } else if (departure === 'returned') {
             this.setState({ selectedSchedule: 'returned', selectedOne: true })
             this.setState({ activeGoing: false, activeReturned: true })
@@ -131,10 +139,7 @@ export default class Line extends React.Component {
                 selectedTime: '',
                 selectedTwo: false
             });
-            this.route = this.navigate.getParam('route');
-            this.route = this.route.replace("Ceta?ii", "Cetații")
-            this.route = this.route.replace("Grivi?ei", "Griviței")
-            this.route = this.route.replace("Bra?ov", "Brașov")
+            this.route = this.reverseRoute()
         }
     }
     errorForUser() {
@@ -278,19 +283,21 @@ export default class Line extends React.Component {
                     this.state.tableData.push(arrForPush);
                 } else if (i === 24) {
                     let key = '00'
-                    let minutesRaw = this.state.going.sambataDuminica[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
+                    if (this.state.returned.sambataDuminica[key] !== undefined) {
+                        let minutesRaw = this.state.going.sambataDuminica[key];
+                        let minutes = JSON.stringify(minutesRaw).split(",")
+                        for (let index = 0; index < minutes.length; index++) {
+                            minutes[index] = minutes[index].replace('["', "");
+                            minutes[index] = minutes[index].replace('"]', "");
+                            minutes[index] = minutes[index].replace('"', "");
+                            minutes[index] = minutes[index].replace('"', "");
 
-                        allHours.push("00:" + minutes[index]);
+                            allHours.push("00:" + minutes[index]);
+                        }
+
+                        var arrForPush = ["00", this.state.going.sambataDuminica[key] + " "]
+                        this.state.tableData.push(arrForPush);
                     }
-
-                    var arrForPush = ["00", this.state.going.sambataDuminica[key] + " "]
-                    this.state.tableData.push(arrForPush);
                 } else {
                     let key = i;
                     let minutesRaw = this.state.going.sambataDuminica[key];
@@ -331,19 +338,21 @@ export default class Line extends React.Component {
                     this.state.tableData.push(arrForPush);
                 } else if (i === 24) {
                     let key = '00'
-                    let minutesRaw = this.state.returned.sambataDuminica[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
+                    if (this.state.returned.sambataDuminica[key] !== undefined) {
+                        let minutesRaw = this.state.returned.sambataDuminica[key];
+                        let minutes = JSON.stringify(minutesRaw).split(",")
+                        for (let index = 0; index < minutes.length; index++) {
+                            minutes[index] = minutes[index].replace('["', "");
+                            minutes[index] = minutes[index].replace('"]', "");
+                            minutes[index] = minutes[index].replace('"', "");
+                            minutes[index] = minutes[index].replace('"', "");
 
-                        allHours.push("00:" + minutes[index]);
+                            allHours.push("00:" + minutes[index]);
+                        }
+
+                        var arrForPush = ["00", this.state.returned.sambataDuminica[key] + " "]
+                        this.state.tableData.push(arrForPush);
                     }
-
-                    var arrForPush = ["00", this.state.returned.sambataDuminica[key] + " "]
-                    this.state.tableData.push(arrForPush);
                 } else {
                     let key = i;
                     let minutesRaw = this.state.returned.sambataDuminica[key];
@@ -369,18 +378,18 @@ export default class Line extends React.Component {
             diffHour: ''
         });
         for (let i = 0; i < allHours.length; i++) {
-          
+
             if (myDate < allHours[i]) {
 
                 var date1 = new Date();
                 var date2 = new Date();
                 let expectedTime = allHours[i].split(":");
                 if (expectedTime[1] != "[]") {
-                   
+
                     let TimeStar = expectedTime[1].split("*");
-                   
+
                     if (TimeStar[1] === "") {
-                      
+
                         this.setState({ expectedTime: allHours[i] });
                         let myTime = myDate.split(":");
                         date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
@@ -396,7 +405,7 @@ export default class Line extends React.Component {
                         } else {
                             this.setState({ exactTime: mins + " minute" })
                         }
-                    }else{
+                    } else {
                         this.setState({ expectedTime: allHours[i] });
                         let myTime = myDate.split(":");
                         date1.setHours(myTime[0]); date1.setMinutes(myTime[1]);
@@ -413,13 +422,13 @@ export default class Line extends React.Component {
                             this.setState({ exactTime: mins + " minute" })
                         }
                     }
-                   
+
                 }
                 else if (expectedTime[1] === "[]") {
                     i++;
                     let expectedTime = allHours[i].split(":");
                     if (expectedTime[1] != "[]") {
-                       
+
                         var TimeStar = expectedTime[1].split("*");
                         if (TimeStar[1] === "") {
                             this.setState({ expectedTime: allHours[i] });
@@ -485,7 +494,7 @@ export default class Line extends React.Component {
             )
         }
     }
-   
+
     checkDeparture() {
         if (typeof this.dataLine.intors !== 'undefined' && typeof this.dataLine.dus !== 'undefined') {
             return (
@@ -537,7 +546,7 @@ export default class Line extends React.Component {
             return (
                 <View style={styles.container}>
                     <TouchableOpacity
-                        style={[styles.buttonModalLeft, this.state.activeGoing && styles.active]}                        
+                        style={[styles.buttonModalLeft, this.state.activeGoing && styles.active]}
                         onPress={() => {
                             this.viewTime('going')
                         }}
