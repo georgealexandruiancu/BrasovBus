@@ -9,7 +9,8 @@ import {
     ScrollView,
     Animated,
     Image,
-    Easing
+    Easing,
+    AsyncStorage
 } from 'react-native';
 import { withTheme } from 'glamorous-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -48,6 +49,15 @@ export default class Line extends React.Component {
             activeReturned: false,
             activeWeek: false,
             activeWeekend: false,
+            willSave:{
+                station: '',
+                line: '',
+                departure: '',
+                time: '',
+                data: '',
+                route: ''
+            },
+            saveButton: true,
         }
         // setInterval(() => {
         //     this.setState({ showText: !this.state.showText });
@@ -163,6 +173,15 @@ export default class Line extends React.Component {
         this.state.tableData = [];
         if (departure === 'week' && this.state.selectedSchedule === 'going') {
             this.setState({ selectedTime: 'week', selectedTwo: true })
+            this.setState({ willSave:{
+                station: this.stationName,
+                line: this.titleLine,
+                departure: "Dus",
+                time: "L - V",
+                data: this.state.going.luniVineri,
+                route: this.route
+            }})
+            this._checkSavedData();
 
             Object.keys(this.state.going.luniVineri).forEach((keys) => {
                 if (i < 10) {
@@ -213,6 +232,17 @@ export default class Line extends React.Component {
             });
         } else if (departure === 'week' && this.state.selectedSchedule === 'returned') {
             this.setState({ selectedTime: 'week', selectedTwo: true })
+            this.setState({
+                willSave: {
+                    station: this.stationName,
+                    line: this.titleLine,
+                    departure: "Intors",
+                    time: "L - V",
+                    data: this.state.returned.luniVineri,
+                    route: this.route
+                }
+            })
+            this._checkSavedData();
 
             Object.keys(this.state.returned.luniVineri).forEach((keys) => {
                 if (i < 10) {
@@ -263,6 +293,17 @@ export default class Line extends React.Component {
             })
         } else if (departure === 'weekend' && this.state.selectedSchedule === 'going') {
             this.setState({ selectedTime: 'weekend', selectedTwo: true })
+            this.setState({
+                willSave: {
+                    station: this.stationName,
+                    line: this.titleLine,
+                    departure: "Dus",
+                    time: "S - D",
+                    data: this.state.going.sambataDuminica,
+                    route: this.route
+                }
+            })
+            this._checkSavedData();
 
 
             Object.keys(this.state.going.sambataDuminica).forEach((keys) => {
@@ -283,7 +324,7 @@ export default class Line extends React.Component {
                     this.state.tableData.push(arrForPush);
                 } else if (i === 24) {
                     let key = '00'
-                    if (this.state.returned.sambataDuminica[key] !== undefined) {
+                    if (this.state.going.sambataDuminica[key] !== undefined) {
                         let minutesRaw = this.state.going.sambataDuminica[key];
                         let minutes = JSON.stringify(minutesRaw).split(",")
                         for (let index = 0; index < minutes.length; index++) {
@@ -318,7 +359,17 @@ export default class Line extends React.Component {
             })
         } else if (departure === 'weekend' && this.state.selectedSchedule === 'returned') {
             this.setState({ selectedTime: 'weekend', selectedTwo: true })
-
+            this.setState({
+                willSave: {
+                    station: this.stationName,
+                    line: this.titleLine,
+                    departure: "Intors",
+                    time: "S - D",
+                    data: this.state.returned.sambataDuminica,
+                    route: this.route
+                }
+            })
+            this._checkSavedData();
 
             Object.keys(this.state.returned.sambataDuminica).forEach((keys) => {
                 if (i < 10) {
@@ -565,11 +616,71 @@ export default class Line extends React.Component {
             )
         }
     }
+    _storeData = async () => {
+        try {
+            var saved = await AsyncStorage.getItem('Saved');
+           
+            if (saved !== null){
+                let savedParsed = JSON.parse(saved);
+                savedParsed.push(this.state.willSave);
+                await AsyncStorage.setItem('Saved', JSON.stringify(savedParsed));
+            }else{
+                var newSave = []
+                newSave.push(this.state.willSave);
+                await AsyncStorage.setItem('Saved', JSON.stringify(newSave));
+            }
+         
+        } catch (error) {
+            alert("erorare" + error)
+        }
+    };
+    _checkSavedData = async () =>{
+        var saved = await AsyncStorage.getItem('Saved');
+        let savedParsed = JSON.parse(saved);
+        this.setState({ saveButton: true });
+        if (savedParsed !== null){
+            for (var i = 0; i < savedParsed.length; i++) {
+                if (this.state.willSave.station === savedParsed[i].station && this.state.willSave.line === savedParsed[i].line && this.state.willSave.departure === savedParsed[i].departure && this.state.willSave.time === savedParsed[i].time) {
+                    this.setState({saveButton: false});
+                    break;
+                }
+            }
+            for (var i = 0; i < savedParsed.length; i++) {
+                if (this.state.willSave.station === savedParsed[i].station && this.state.willSave.line === savedParsed[i].line && this.state.willSave.departure === savedParsed[i].departure && this.state.willSave.time === savedParsed[i].time) {
+                    this.setState({ saveButton: false });
+                    break;
+                }
+            }
+        }
+    }
     render() {
         return (
             <View style={{ flex: 1 }}>
                 <ScrollView style={{ flex: 1 }}>
                     <Text style={styles.titleLine}>{this.titleLine}</Text>
+                    <View style={styles.topRight}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                // this._checkSavedData();
+                                if(this.state.saveButton === true){
+                                    if (this.state.willSave.line !== "" && this.state.willSave.departure !== "" && this.state.willSave.time !== "" && this.state.willSave.data !== "" && this.state.willSave.station !== "" && this.state.willSave.route !== "") {
+                                        this._storeData();
+                                        this.setState({ saveButton: false });
+                                    } else {
+                                        alert("Te rugăm să alegi ruta (dus/întors) și data din saptămână (L-V / S-D)")
+                                    }
+                                }
+                                else{
+                                    alert("Aceste date sunt salvate");
+                                }
+                            }
+                            }
+                            style={[styles.buttonSave, this.state.saveButton ? styles.buttonSave : styles.buttonSaveInvalid]}
+                        >
+                            <Icon name="heart" size={25} color="black" style={styles.iconSave} />
+                        </TouchableOpacity>
+                    </View> 
+                   
                     <Text style={styles.titleRoute}>{this.route}</Text>
                     {this.errorForUser()}
                     {this.checkDeparture()}
@@ -592,6 +703,7 @@ export default class Line extends React.Component {
                         </TouchableOpacity>
                     </View>
                     {this.checkView()}
+                   
                     {/* <Text>{JSON.stringify(this.dataLine)}</Text> */}
                 </ScrollView>
                 {/* <View>
@@ -622,6 +734,50 @@ const styles = StyleSheet.create({
         width: 100,
         position: 'absolute',
         left: 0,
+    },
+    topRight:{
+        position: 'absolute',
+        right: 5,
+        top: 0,
+    },
+    bottomView:{
+        flex: 1,
+        justifyContent: 'flex-end',
+        marginBottom: 36
+    },
+    buttonSave: {
+        alignSelf: 'center',
+        textAlign: 'center',
+        borderBottomLeftRadius: 30,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        borderBottomRightRadius: 30,
+        textTransform: 'uppercase',
+        fontWeight: 'bold',
+        marginTop: 10,
+        backgroundColor: '#012853',
+        paddingBottom: 10,
+        textAlign: 'center',
+        paddingLeft: 20,
+        paddingRight: 20,
+        width: 67,
+    },
+    buttonSaveInvalid:{
+        alignSelf: 'center',
+        textAlign: 'center',
+        borderBottomLeftRadius: 30,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        borderBottomRightRadius: 30,
+        textTransform: 'uppercase',
+        fontWeight: 'bold',
+        marginTop: 10,
+        backgroundColor: '#f44242',
+        paddingBottom: 10,
+        textAlign: 'center',
+        paddingLeft: 20,
+        paddingRight: 20,
+        width: 67,
     },
     buttonModalLeft: {
         textAlign: 'center',
@@ -697,7 +853,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     titleLine: {
-        paddingTop: 10,
+        paddingTop: 13,
         paddingBottom: 10,
         fontSize: 23,
         fontWeight: '900',
@@ -758,6 +914,10 @@ const styles = StyleSheet.create({
         right: 15,
         top: 9,
         bottom: 0,
+        color: 'white',
+    },
+    iconSave: {
+        top: 4.5,
         color: 'white',
     }
 })

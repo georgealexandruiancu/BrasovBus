@@ -13,6 +13,8 @@ import Stations from './Stations';
 import Line from './Line';
 import Searchline from './Searchline';
 import Lineinfo from './Lineinfo';
+import Save from './Save';
+
 
 
 const RootStack = createStackNavigator({
@@ -30,6 +32,9 @@ const RootStack = createStackNavigator({
   },
   Lineinfo: {
     screen: Lineinfo
+  },
+  Save: {
+    screen: Save
   }
 });
 const App = createAppContainer(RootStack)

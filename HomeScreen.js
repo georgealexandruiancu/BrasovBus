@@ -258,7 +258,7 @@ export default class HomeScreen extends React.Component {
                         <TouchableHighlight onPress={this.toggleModal.bind(this, true)} style={styles.buttonOpenModal} underlayColor={'transparent'}>
                             <Text style={styles.textOpenModal}>
                                 Caută stația {"  "}
-                                <Icon name="map-signs" size={25} color="white" style={{ paddingLeft: 20 }} />
+                                <Icon name="map-signs" size={22} color="white" style={{ paddingLeft: 20 }} />
                             </Text>
                         </TouchableHighlight>
                     </View>
@@ -266,7 +266,15 @@ export default class HomeScreen extends React.Component {
                         <TouchableOpacity onPress={this.toggleModalLine.bind(this, true)} style={styles.buttonOpenModalLine} underlayColor={'transparent'}>
                             <Text style={styles.textOpenModal}>
                                 Caută linia {"  "}
-                                <Icon name="bus" size={25} color="white" style={{ paddingLeft: 20 }} />
+                                <Icon name="bus" size={22} color="white" style={{ paddingLeft: 20 }} />
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.container3}>
+                        <TouchableOpacity onPress={() => navigate('Save')} style={styles.buttonOpenModalLine} underlayColor={'transparent'}>
+                            <Text style={styles.textOpenModal}>
+                                Salvările mele {" "}
+                                <Icon name="heart" size={22} color="white" style={{ paddingLeft: 20 }} />
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -301,7 +309,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         padding: 10,
-        top: 30+"%",
+        top: 20+"%",
         display: 'flex',
         justifyContent: 'center',
         backgroundColor: '#3b37fe',
@@ -316,7 +324,23 @@ const styles = StyleSheet.create({
     container2: {
         alignItems: 'center',
         padding: 10,
-        top: 35 + "%",
+        top: 25 + "%",
+        display: 'flex',
+        justifyContent: 'center',
+        backgroundColor: '#3b37fe',
+        borderRadius: 25,
+        color: 'white',
+        width: 60 + "%",
+        left: 50 + "%",
+        transform: [
+            { translateX: - dimensions.width / 3.2 },
+        ],
+        marginTop: 20,
+    },
+    container3: {
+        alignItems: 'center',
+        padding: 10,
+        top: 30 + "%",
         display: 'flex',
         justifyContent: 'center',
         backgroundColor: '#3b37fe',
@@ -369,7 +393,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '900',
         letterSpacing: 1,
-        fontSize: 22,
+        fontSize: 20,
     },
     input:{
         borderBottomWidth: 2,

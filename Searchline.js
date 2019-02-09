@@ -99,7 +99,7 @@ export default class Stations extends React.Component {
         if (this.state.errorSearch === true && this.state.lineSearch === "") {
             return (
                 <View style={styles.container}>
-                    <Text>Nu am gasit nici un rezultat. Incearca din nou !</Text>
+                    {/* <Text>Nu am gasit nici un rezultat. Incearca din nou !</Text> */}
                 </View>
             )
         } else {

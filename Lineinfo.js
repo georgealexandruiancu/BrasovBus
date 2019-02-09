@@ -87,6 +87,7 @@ export default class Lineinfo extends React.Component {
                         this.state.tableData.push(arrForPush);
                     } else if (i === 24) {
                         let key = '00'
+                        if (this.dataLine[this.titleStation].luniVineri[key] !== undefined) {
                         let minutesRaw = this.dataLine[this.titleStation].luniVineri[key];
                        
                         let minutes = JSON.stringify(minutesRaw).split(",")
@@ -100,6 +101,7 @@ export default class Lineinfo extends React.Component {
                         }
                         var arrForPush = ["00", this.dataLine[this.titleStation].luniVineri[key] + " "]
                         this.state.tableData.push(arrForPush);
+                        }
                     } else {
                         let key = i;
                         let minutesRaw = this.dataLine[this.titleStation].luniVineri[key];
@@ -142,6 +144,8 @@ export default class Lineinfo extends React.Component {
                         this.state.tableData.push(arrForPush);
                     } else if (i === 24) {
                         let key = '00'
+                        if (this.dataLine[this.titleStation].sambataDuminica[key] !== undefined) {
+
                         let minutesRaw = this.dataLine[this.titleStation].sambataDuminica[key];
                         let minutes = JSON.stringify(minutesRaw).split(",")
                         for (let index = 0; index < minutes.length; index++) {
@@ -155,6 +159,7 @@ export default class Lineinfo extends React.Component {
 
                         var arrForPush = ["00", this.dataLine[this.titleStation].sambataDuminica[key] + " "]
                         this.state.tableData.push(arrForPush);
+                        }
                     } else {
                         let key = i;
                         let minutesRaw = this.dataLine[this.titleStation].sambataDuminica[key];
