@@ -1,0 +1,282 @@
+[
+                {
+                    Fragilor: {
+                        latlng: {
+                            latitude: 45.633068,
+                            longitude: 25.6055555,
+                        }
+                    },
+                },
+                {
+                    Fragilor: {
+                        latlng: {
+                            latitude: 45.6326324,
+                            longitude: 25.6047159,
+                        }
+                    }
+                },
+                {
+                    ValeaCetatii: {
+                        latlng: {
+                            latitude: 45.6306138,
+                            longitude: 25.601677,
+                        }
+                    }
+                },
+                {
+                    ScGen25: {
+                        latlng: {
+                            latitude: 45.6340976,
+                            longitude: 25.6059873,
+                        }
+                    }
+                },
+                {
+                    ScGen20: {
+                        latlng: {
+                            latitude: 45.6364035,
+                            longitude: 25.6086923,
+                        }
+                    }
+                },
+                {
+                    ScGen20: {
+                        latlng: {
+                            latitude: 45.6379249,
+                            longitude: 25.609383,
+                        }
+                    }
+                },
+                {
+                    Muncii: {
+                        latlng: {
+                            latitude: 45.6384317,
+                            longitude: 25.611062,
+                        }
+                    }
+                },
+                {
+                    Muncii: {
+                        latlng: {
+                            latitude: 45.6390169,
+                            longitude: 25.6106463,
+                        }
+                    }
+                },
+                {
+                    Muncii: {
+                        latlng: {
+                            latitude: 45.6399339,
+                            longitude: 25.6112605,
+                        }
+                    }
+                },
+                {
+                    Carpatilor: {
+                        latlng: {
+                            latitude: 45.6418199,
+                            longitude: 25.6146991,
+                        }
+                    }
+                },
+                {
+                    Carpatilor: {
+                        latlng: {
+                            latitude: 45.6419892,
+                            longitude: 25.6156111,
+                        }
+                    }
+                },
+                {
+                    PiataDecebal: {
+                        latlng: {
+                            latitude: 45.6432545,
+                            longitude: 25.6178058,
+                        }
+                    }
+                },
+                {
+                    PiataDecebal: {
+                        latlng: {
+                            latitude: 45.6440482,
+                            longitude: 25.6182068,
+                        }
+                    }
+                },
+                {
+                    SpitalulJudetean: {
+                        latlng: {
+                            latitude: 45.6462791,
+                            longitude: 25.6211049,
+                        }
+                    }
+                },
+                {
+                    SpitalulJudetean: {
+                        latlng: {
+                            latitude: 45.6472879,
+                            longitude: 25.6193132,
+                        }
+                    }
+                },
+                {
+                    SpitalulJudetean: {
+                        latlng: {
+                            latitude: 45.6487392,
+                            longitude: 25.6188103,
+                        }
+                    }
+                },
+                {
+                    HidroB: {
+                        latlng: {
+                            latitude: 45.6513782,
+                            longitude: 25.6140306,
+                        }
+                    }
+                },
+                {
+                    Toamnei: {
+                        latlng: {
+                            latitude: 45.6525495,
+                            longitude: 25.6156272,
+                        }
+                    }
+                },
+                {
+                    ToamneiCEC: {
+                        latlng: {
+                            latitude: 45.6544581,
+                            longitude: 25.6154609,
+                        }
+                    }
+                },
+                {
+                    CEC: {
+                        latlng: {
+                            latitude: 45.6546011,
+                            longitude: 25.615245,
+                        }
+                    }
+                },
+                {
+                    LiceulMesota: {
+                        latlng: {
+                            latitude: 45.6539121,
+                            longitude: 25.6092616,
+                        }
+                    }
+                },
+                {
+                    CameraDeComert: {
+                        latlng: {
+                            latitude: 45.6510618,
+                            longitude: 25.6082759,
+                        }
+                    }
+                },
+                {
+                    Sanitas: {
+                        latlng: {
+                            latitude: 45.6493335,
+                            longitude: 25.6004231,
+                        }
+                    }
+                },
+                {
+                    Primarie: {
+                        latlng: {
+                            latitude: 45.6465304,
+                            longitude: 25.5962609,
+                        }
+                    }
+                },
+                {
+                    LivadaPostei: {
+                        latlng: {
+                            latitude: 45.6455145,
+                            longitude: 25.588325,
+                        }
+                    }
+                },
+                {
+                    Dramatic: {
+                        latlng: {
+                            latitude: 45.6452745,
+                            longitude: 25.5982572,
+                        }
+                    }
+                },
+                {
+                    Patria: {
+                        latlng: {
+                            latitude: 45.6486215,
+                            longitude: 25.605306,
+                        }
+                    }
+                },
+                {
+                    Patria: {
+                        latlng: {
+                            latitude: 45.6512282,
+                            longitude: 25.6100073,
+                        }
+                    }
+                },
+                {
+                    LiceulDeInformatica: {
+                        latlng: {
+                            latitude: 45.6448507,
+                            longitude: 25.6230327,
+                        }
+                    }
+                },
+                {
+                    LiceulDeInformatica: {
+                        latlng: {
+                            latitude: 45.6433375,
+                            longitude: 25.6241861,
+                        }
+                    }
+                },
+                {
+                    Berzei: {
+                        latlng: {
+                            latitude: 45.6402752,
+                            longitude: 25.6278741,
+                        }
+                    }
+                },
+                {
+                    Berzei: {
+                        latlng: {
+                            latitude: 45.6396901,
+                            longitude: 25.6281638,
+                        }
+                    }
+                },
+                {
+                    Berzei: {
+                        latlng: {
+                            latitude: 45.6396395,
+                            longitude: 25.6271164,
+                        }
+                    }
+                },
+                {
+                    Poienelor: {
+                        latlng: {
+                            latitude: 45.6346687,
+                            longitude: 25.6333519,
+                        }
+                    }
+                },
+                {
+                    Roman: {
+                        latlng: {
+                            latitude: 45.6328368,
+                            longitude: 25.632513,
+                        }
+                    }
+                },
+            ],

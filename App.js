@@ -14,6 +14,9 @@ import Line from './Line';
 import Searchline from './Searchline';
 import Lineinfo from './Lineinfo';
 import Save from './Save';
+import Maps from './Maps';
+import AnimatedMarkers from './animatedMap';
+import MapTest from './mapsTest';
 
 
 
@@ -35,6 +38,15 @@ const RootStack = createStackNavigator({
   },
   Save: {
     screen: Save
+  },
+  Maps: {
+    screen: Maps
+  },
+  AnimatedMarkers: {
+    screen: AnimatedMarkers
+  },
+  MapTest: {
+    screen: MapTest
   }
 });
 const App = createAppContainer(RootStack)

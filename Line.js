@@ -49,6 +49,8 @@ export default class Line extends React.Component {
             activeReturned: false,
             activeWeek: false,
             activeWeekend: false,
+            activeDuminica: false,
+            activeSambata: false,
             willSave:{
                 station: '',
                 line: '',
@@ -58,6 +60,7 @@ export default class Line extends React.Component {
                 route: ''
             },
             saveButton: true,
+            buttonsThree: false,
         }
         // setInterval(() => {
         //     this.setState({ showText: !this.state.showText });
@@ -77,26 +80,50 @@ export default class Line extends React.Component {
         this.route = this.route.replace("Grivi?ei", "Griviței")
         this.route = this.route.replace("Bra?ov", "Brașov")
         if (this._isMounted === true) {
-            if (typeof this.dataLine.dus !== 'undefined') {
-                this.setState({
-                    going: {
-                        luniVineri: this.dataLine.dus[this.stationName].luniVineri,
-                        sambataDuminica: this.dataLine.dus[this.stationName].sambataDuminica
-                    }
-                });
-                console.log(this.dataLine.dus);
-
-            }
-            if (typeof this.dataLine.intors !== 'undefined') {
+            console.log(this.dataLine)
+            if (typeof this.dataLine.intors !== 'undefined' && typeof this.dataLine.intors[this.stationName].sambataDuminica !== 'undefined') {
                 this.setState({
                     returned: {
                         luniVineri: this.dataLine.intors[this.stationName].luniVineri,
                         sambataDuminica: this.dataLine.intors[this.stationName].sambataDuminica
                     },
-                });
-                console.log(this.dataLine.intors);
+                    buttonsThree: false,
 
+                });
+                console.log(this.dataLine.dus);
+
+            } else if (typeof this.dataLine.intors !== 'undefined' && typeof this.dataLine.intors[this.stationName].sambata !== 'undefined') {
+                this.setState({
+                    returned: {
+                        luniVineri: this.dataLine.intors[this.stationName].luniVineri,
+                        sambata: this.dataLine.intors[this.stationName].sambata,
+                        duminica: this.dataLine.intors[this.stationName].duminica,
+                    },
+                    buttonsThree: true,
+                });
             }
+            
+            if (typeof this.dataLine.dus !== 'undefined' && typeof this.dataLine.dus[this.stationName].sambataDuminica !== 'undefined') {
+                this.setState({
+                    going: {
+                        luniVineri: this.dataLine.dus[this.stationName].luniVineri,
+                        sambataDuminica: this.dataLine.dus[this.stationName].sambataDuminica
+                    },
+                    buttonsThree: false,
+                });
+                console.log(this.dataLine.dus);
+
+            } else if (typeof this.dataLine.dus !== 'undefined' && typeof this.dataLine.dus[this.stationName].sambata !== 'undefined'){
+                this.setState({
+                    going: {
+                        luniVineri: this.dataLine.dus[this.stationName].luniVineri,
+                        sambata: this.dataLine.dus[this.stationName].sambata,
+                        duminica: this.dataLine.dus[this.stationName].duminica,
+                    },
+                    buttonsThree: true,
+                });
+            }
+           
 
         }
     }
@@ -128,6 +155,8 @@ export default class Line extends React.Component {
                 expectedTime: '',
                 activeWeek: false,
                 activeWeekend: false,
+                activeSambata: false,
+                activeDuminica: false,
                 selectedTime: '',
                 selectedTwo: false
             });
@@ -146,6 +175,8 @@ export default class Line extends React.Component {
                 expectedTime: '',
                 activeWeek: false,
                 activeWeekend: false,
+                activeSambata: false,
+                activeDuminica: false,
                 selectedTime: '',
                 selectedTwo: false
             });
@@ -182,54 +213,20 @@ export default class Line extends React.Component {
                 route: this.route
             }})
             this._checkSavedData();
-
+           
             Object.keys(this.state.going.luniVineri).forEach((keys) => {
-                if (i < 10) {
-                    let key = "0" + i;
-                    let minutesRaw = this.state.going.luniVineri[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
+                var arrForPush = []
+                Object.values(this.state.going.luniVineri[keys]).forEach((minutes) => {
+                    allHours.push(keys + ":" + minutes)
+                    arrForPush = [keys, this.state.going.luniVineri[keys] + " "]
+                })
+                this.state.tableData.push(arrForPush);
 
-                        allHours.push("0" + i + ":" + minutes[index]);
-                    }
-                    var arrForPush = ["0" + i, this.state.going.luniVineri[key] + " "]
-                    this.state.tableData.push(arrForPush);
-                } else if (i === 24) {
-                    let key = '00'
-                    let minutesRaw = this.state.going.luniVineri[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
-
-                        allHours.push("00:" + minutes[index]);
-                    }
-                    var arrForPush = ["00", this.state.going.luniVineri[key] + " "]
-                    this.state.tableData.push(arrForPush);
-                } else {
-                    let key = i;
-                    let minutesRaw = this.state.going.luniVineri[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
-
-                        allHours.push(i + ":" + minutes[index]);
-                    }
-
-                    var arrForPush = [i, this.state.going.luniVineri[key] + " "]
-                    this.state.tableData.push(arrForPush);
-                }
-                i = i + 1;
             });
+            this.state.tableData.sort();
+            console.log(allHours);
+       
+
         } else if (departure === 'week' && this.state.selectedSchedule === 'returned') {
             this.setState({ selectedTime: 'week', selectedTwo: true })
             this.setState({
@@ -243,54 +240,19 @@ export default class Line extends React.Component {
                 }
             })
             this._checkSavedData();
-
             Object.keys(this.state.returned.luniVineri).forEach((keys) => {
-                if (i < 10) {
-                    let key = "0" + i;
-                    let minutesRaw = this.state.returned.luniVineri[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
+                var arrForPush = []
+                Object.values(this.state.returned.luniVineri[keys]).forEach((minutes) => {
+                    allHours.push(keys + ":" + minutes)
+                    arrForPush = [keys, this.state.returned.luniVineri[keys] + " "]
+                })
+                this.state.tableData.push(arrForPush);
 
-                        allHours.push("0" + i + ":" + minutes[index]);
-                    }
-                    var arrForPush = ["0" + i, this.state.returned.luniVineri[key] + " "]
-                    this.state.tableData.push(arrForPush);
-                } else if (i === 24) {
-                    let key = '00'
-                    let minutesRaw = this.state.returned.luniVineri[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
+            });
+            this.state.tableData.sort();
+            console.log(allHours);
+         
 
-                        allHours.push("00:" + minutes[index]);
-                    }
-                    var arrForPush = ["00", this.state.returned.luniVineri[key] + " "]
-                    this.state.tableData.push(arrForPush);
-                } else {
-                    let key = i;
-                    let minutesRaw = this.state.returned.luniVineri[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
-
-                        allHours.push(i + ":" + minutes[index]);
-                    }
-
-                    var arrForPush = [i, this.state.returned.luniVineri[key] + " "]
-                    this.state.tableData.push(arrForPush);
-                }
-                i = i + 1;
-            })
         } else if (departure === 'weekend' && this.state.selectedSchedule === 'going') {
             this.setState({ selectedTime: 'weekend', selectedTwo: true })
             this.setState({
@@ -305,58 +267,17 @@ export default class Line extends React.Component {
             })
             this._checkSavedData();
 
-
             Object.keys(this.state.going.sambataDuminica).forEach((keys) => {
-                if (i < 10) {
-                    let key = "0" + i;
-                    let minutesRaw = this.state.going.sambataDuminica[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
+                var arrForPush = []
+                Object.values(this.state.going.sambataDuminica[keys]).forEach((minutes) => {
+                    allHours.push(keys + ":" + minutes)
+                    arrForPush = [keys, this.state.going.sambataDuminica[keys] + " "]
+                })
+                this.state.tableData.push(arrForPush);
 
-                        allHours.push("0" + i + ":" + minutes[index]);
-                    }
-
-                    var arrForPush = ["0" + i, this.state.going.sambataDuminica[key] + " "]
-                    this.state.tableData.push(arrForPush);
-                } else if (i === 24) {
-                    let key = '00'
-                    if (this.state.going.sambataDuminica[key] !== undefined) {
-                        let minutesRaw = this.state.going.sambataDuminica[key];
-                        let minutes = JSON.stringify(minutesRaw).split(",")
-                        for (let index = 0; index < minutes.length; index++) {
-                            minutes[index] = minutes[index].replace('["', "");
-                            minutes[index] = minutes[index].replace('"]', "");
-                            minutes[index] = minutes[index].replace('"', "");
-                            minutes[index] = minutes[index].replace('"', "");
-
-                            allHours.push("00:" + minutes[index]);
-                        }
-
-                        var arrForPush = ["00", this.state.going.sambataDuminica[key] + " "]
-                        this.state.tableData.push(arrForPush);
-                    }
-                } else {
-                    let key = i;
-                    let minutesRaw = this.state.going.sambataDuminica[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
-
-                        allHours.push(i + ":" + minutes[index]);
-                    }
-
-                    var arrForPush = [i, this.state.going.sambataDuminica[key] + " "]
-                    this.state.tableData.push(arrForPush);
-                }
-                i = i + 1;
-            })
+            });
+            this.state.tableData.sort();
+            console.log(allHours);
         } else if (departure === 'weekend' && this.state.selectedSchedule === 'returned') {
             this.setState({ selectedTime: 'weekend', selectedTwo: true })
             this.setState({
@@ -372,57 +293,121 @@ export default class Line extends React.Component {
             this._checkSavedData();
 
             Object.keys(this.state.returned.sambataDuminica).forEach((keys) => {
-                if (i < 10) {
-                    let key = "0" + i;
-                    let minutesRaw = this.state.returned.sambataDuminica[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
+                var arrForPush = []
+                Object.values(this.state.returned.sambataDuminica[keys]).forEach((minutes) => {
+                    allHours.push(keys + ":" + minutes)
+                    arrForPush = [keys, this.state.returned.sambataDuminica[keys] + " "]
+                })
+                this.state.tableData.push(arrForPush);
 
-                        allHours.push("0" + i + ":" + minutes[index]);
-                    }
-
-                    var arrForPush = ["0" + i, this.state.returned.sambataDuminica[key] + " "]
-                    this.state.tableData.push(arrForPush);
-                } else if (i === 24) {
-                    let key = '00'
-                    if (this.state.returned.sambataDuminica[key] !== undefined) {
-                        let minutesRaw = this.state.returned.sambataDuminica[key];
-                        let minutes = JSON.stringify(minutesRaw).split(",")
-                        for (let index = 0; index < minutes.length; index++) {
-                            minutes[index] = minutes[index].replace('["', "");
-                            minutes[index] = minutes[index].replace('"]', "");
-                            minutes[index] = minutes[index].replace('"', "");
-                            minutes[index] = minutes[index].replace('"', "");
-
-                            allHours.push("00:" + minutes[index]);
-                        }
-
-                        var arrForPush = ["00", this.state.returned.sambataDuminica[key] + " "]
-                        this.state.tableData.push(arrForPush);
-                    }
-                } else {
-                    let key = i;
-                    let minutesRaw = this.state.returned.sambataDuminica[key];
-                    let minutes = JSON.stringify(minutesRaw).split(",")
-                    for (let index = 0; index < minutes.length; index++) {
-                        minutes[index] = minutes[index].replace('["', "");
-                        minutes[index] = minutes[index].replace('"]', "");
-                        minutes[index] = minutes[index].replace('"', "");
-                        minutes[index] = minutes[index].replace('"', "");
-
-                        allHours.push(i + ":" + minutes[index]);
-                    }
-
-                    var arrForPush = [i, this.state.returned.sambataDuminica[key] + " "]
-                    this.state.tableData.push(arrForPush);
+            });
+            this.state.tableData.sort();
+            console.log(allHours);
+        } else if (departure === 'sambata' && this.state.selectedSchedule === 'returned') {
+            this.setState({ selectedTime: 'sambata', selectedTwo: true })
+            this.setState({
+                willSave: {
+                    station: this.stationName,
+                    line: this.titleLine,
+                    departure: "Intors",
+                    time: "Sambata",
+                    data: this.state.returned.sambata,
+                    route: this.route
                 }
-                i = i + 1;
             })
+            this._checkSavedData();
+
+            Object.keys(this.state.returned.sambata).forEach((keys) => {
+                var arrForPush = []
+                Object.values(this.state.returned.sambata[keys]).forEach((minutes) => {
+                    allHours.push(keys + ":" + minutes)
+                    arrForPush = [keys, this.state.returned.sambata[keys] + " "]
+                })
+                this.state.tableData.push(arrForPush);
+
+            });
+            this.state.tableData.sort();
+            console.log(allHours);
         }
+        else if (departure === 'duminica' && this.state.selectedSchedule === 'returned') {
+            this.setState({ selectedTime: 'duminica', selectedTwo: true })
+            this.setState({
+                willSave: {
+                    station: this.stationName,
+                    line: this.titleLine,
+                    departure: "Intors",
+                    time: "Duminica",
+                    data: this.state.returned.duminica,
+                    route: this.route
+                }
+            })
+            this._checkSavedData();
+
+            Object.keys(this.state.returned.duminica).forEach((keys) => {
+                var arrForPush = []
+                Object.values(this.state.returned.duminica[keys]).forEach((minutes) => {
+                    allHours.push(keys + ":" + minutes)
+                    arrForPush = [keys, this.state.returned.duminica[keys] + " "]
+                })
+                this.state.tableData.push(arrForPush);
+
+            });
+            this.state.tableData.sort();
+            console.log(allHours);
+        }
+        else if (departure === 'duminica' && this.state.selectedSchedule === 'going') {
+            this.setState({ selectedTime: 'duminica', selectedTwo: true })
+            this.setState({
+                willSave: {
+                    station: this.stationName,
+                    line: this.titleLine,
+                    departure: "Intors",
+                    time: "Duminica",
+                    data: this.state.going.duminica,
+                    route: this.route
+                }
+            })
+            this._checkSavedData();
+
+            Object.keys(this.state.going.duminica).forEach((keys) => {
+                var arrForPush = []
+                Object.values(this.state.going.duminica[keys]).forEach((minutes) => {
+                    allHours.push(keys + ":" + minutes)
+                    arrForPush = [keys, this.state.going.duminica[keys] + " "]
+                })
+                this.state.tableData.push(arrForPush);
+
+            });
+            this.state.tableData.sort();
+            console.log(allHours);
+        }
+        else if (departure === 'sambata' && this.state.selectedSchedule === 'going') {
+            this.setState({ selectedTime: 'sambata', selectedTwo: true })
+            this.setState({
+                willSave: {
+                    station: this.stationName,
+                    line: this.titleLine,
+                    departure: "Intors",
+                    time: "Sambata",
+                    data: this.state.going.sambata,
+                    route: this.route
+                }
+            })
+            this._checkSavedData();
+
+            Object.keys(this.state.going.sambata).forEach((keys) => {
+                var arrForPush = []
+                Object.values(this.state.going.sambata[keys]).forEach((minutes) => {
+                    allHours.push(keys + ":" + minutes)
+                    arrForPush = [keys, this.state.going.sambata[keys] + " "]
+                })
+                this.state.tableData.push(arrForPush);
+
+            });
+            this.state.tableData.sort();
+            console.log(allHours);
+        }
+
 
         this.setState({
             diffMin: '',
@@ -547,6 +532,7 @@ export default class Line extends React.Component {
     }
 
     checkDeparture() {
+        console.log(this.dataLine);
         if (typeof this.dataLine.intors !== 'undefined' && typeof this.dataLine.dus !== 'undefined') {
             return (
                 <View style={styles.container}>
@@ -602,7 +588,7 @@ export default class Line extends React.Component {
                             this.viewTime('going')
                         }}
                         underlayColor='#fff'>
-                        <Icon name="chevron-circle-left" size={25} color="black" style={styles.iconLeft} />
+                        <Icon name="chevron-circle-left" size={22} color="black" style={styles.iconLeft} />
                         <Text style={styles.text}>{'Dus'.toLocaleUpperCase()}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -610,7 +596,7 @@ export default class Line extends React.Component {
                         disabled={true}
                         underlayColor='#fff'>
                         <Text style={styles.text}>{'Întors'.toLocaleUpperCase()}</Text>
-                        <Icon name="chevron-circle-right" size={25} color="black" style={styles.iconRight} />
+                        <Icon name="chevron-circle-right" size={22} color="black" style={styles.iconRight} />
                     </TouchableOpacity>
                 </View>
             )
@@ -653,6 +639,59 @@ export default class Line extends React.Component {
             }
         }
     }
+    _checkTimeWeek(){
+        if (this.state.buttonsThree){
+            return(
+                <View style={styles.container}>
+                    <TouchableOpacity
+                        style={[styles.buttonModalLeft, this.state.activeWeek && styles.active]}
+                        onPress={() => { this.viewSchedule('week'); this.setState({ activeWeek: true, activeWeekend: false, activeSambata: false, activeDuminica: false }) }}
+                        underlayColor='#fff'>
+                        <Icon name="calendar" size={22} color="black" style={styles.iconLeft} />
+
+                        <Text style={styles.text}>{'L-V'.toLocaleUpperCase()}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.buttonModalRound, this.state.activeSambata && styles.active]}
+                        onPress={() => { this.viewSchedule('sambata'); this.setState({ activeWeek: false, activeWeekend: false, activeSambata: true, activeDuminica: false }) }}
+                        underlayColor='#fff'>
+                        <Text style={styles.text}>{'S'.toLocaleUpperCase()}</Text>
+                       
+
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.buttonModalRight, this.state.activeDuminica && styles.active]}
+                        onPress={() => { this.viewSchedule('duminica'); this.setState({ activeWeek: false, activeWeekend: false, activeSambata: false, activeDuminica: true }) }}
+                        underlayColor='#fff'>
+                        <Text style={styles.text}>{'D'.toLocaleUpperCase()}</Text>
+                        <Icon name="calendar" size={22} color="black" style={styles.iconRight} />
+
+                    </TouchableOpacity>
+                </View>
+            )
+        } else if (this.state.buttonsThree === false){
+            return (
+                <View style={styles.container}>
+                    <TouchableOpacity
+                        style={[styles.buttonModalLeft, this.state.activeWeek && styles.active]}
+                        onPress={() => { this.viewSchedule('week'); this.setState({ activeWeek: true, activeWeekend: false }) }}
+                        underlayColor='#fff'>
+                        <Icon name="calendar" size={22} color="black" style={styles.iconLeft} />
+
+                        <Text style={styles.text}>{'L-V'.toLocaleUpperCase()}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.buttonModalRight, this.state.activeWeekend && styles.active]}
+                        onPress={() => { this.viewSchedule('weekend'); this.setState({ activeWeek: false, activeWeekend: true }) }}
+                        underlayColor='#fff'>
+                        <Text style={styles.text}>{'S-D'.toLocaleUpperCase()}</Text>
+                        <Icon name="calendar" size={22} color="black" style={styles.iconRight} />
+
+                    </TouchableOpacity>
+                </View>
+            )
+        }
+    }
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -684,24 +723,7 @@ export default class Line extends React.Component {
                     <Text style={styles.titleRoute}>{this.route}</Text>
                     {this.errorForUser()}
                     {this.checkDeparture()}
-                    <View style={styles.container}>
-                        <TouchableOpacity
-                            style={[styles.buttonModalLeft, this.state.activeWeek && styles.active]}
-                            onPress={() => { this.viewSchedule('week'); this.setState({ activeWeek: true, activeWeekend: false }) }}
-                            underlayColor='#fff'>
-                            <Icon name="calendar" size={25} color="black" style={styles.iconLeft} />
-
-                            <Text style={styles.text}>{'L-V'.toLocaleUpperCase()}</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.buttonModalRight, this.state.activeWeekend && styles.active]}
-                            onPress={() => { this.viewSchedule('weekend'); this.setState({ activeWeek: false, activeWeekend: true }) }}
-                            underlayColor='#fff'>
-                            <Text style={styles.text}>{'S-D'.toLocaleUpperCase()}</Text>
-                            <Icon name="calendar" size={25} color="black" style={styles.iconRight} />
-
-                        </TouchableOpacity>
-                    </View>
+                    {this._checkTimeWeek()}
                     {this.checkView()}
                    
                     {/* <Text>{JSON.stringify(this.dataLine)}</Text> */}
@@ -719,7 +741,7 @@ const styles = StyleSheet.create({
     head: { height: 60, backgroundColor: '#000', borderRadius: 25, paddingTop: 10, paddingBottom: 10, },
     text: { paddingTop: 10, paddingBottom: 10, backgroundColor: '#000', color: 'black' },
     container: {
-        width: 100 + "%",
+        width: 80 + "%",
         flexDirection: 'row',
         alignSelf: 'center',
         alignItems: 'center',
@@ -791,7 +813,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingLeft: 20,
         paddingRight: 20,
-        width: 150,
+        width: 125,
         position: 'relative',
     },
     active: {
@@ -809,7 +831,21 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingLeft: 20,
         paddingRight: 20,
-        width: 150,
+        width: 125,
+        position: 'relative',
+
+    },
+    buttonModalRound: {
+        textAlign: 'center',
+        textTransform: 'uppercase',
+        fontWeight: 'bold',
+        marginTop: 10,
+        backgroundColor: '#012853',
+        paddingBottom: 10,
+        textAlign: 'center',
+        paddingLeft: 20,
+        paddingRight: 20,
+        width: 125,
         position: 'relative',
 
     },
@@ -825,7 +861,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingLeft: 20,
         paddingRight: 20,
-        width: 150,
+        width: 125,
         position: 'relative',
     },
     buttonModalRightDisabled: {
@@ -840,7 +876,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingLeft: 20,
         paddingRight: 20,
-        width: 150,
+        width: 125,
         position: 'relative',
 
     },
@@ -850,7 +886,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '900',
         letterSpacing: 1,
-        fontSize: 18,
+        fontSize: 15,
     },
     titleLine: {
         paddingTop: 13,
@@ -905,14 +941,14 @@ const styles = StyleSheet.create({
     iconLeft: {
         position: 'absolute',
         left: 15,
-        top: 9,
+        top: 6,
         bottom: 0,
         color: 'white',
     },
     iconRight: {
         position: 'absolute',
         right: 15,
-        top: 9,
+        top: 6,
         bottom: 0,
         color: 'white',
     },
